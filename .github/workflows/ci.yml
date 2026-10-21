@@ -1,0 +1,36 @@
+name: UI/UX & Quality Verification CI
+
+on:
+  push:
+    branches: [ main, feature/ui-ux-design ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify Documentation & Mockups Structure
+        run: |
+          echo "Verifying lab report artifacts..."
+          test -f "docs/Laboratorna_Robota_2_Bahyn_MkV_Sales_Manager.docx" || echo "Warning: Docx report check"
+          test -f "mockups/01_master_hub_overview.svg"
+          test -f "mockups/02_analytics_dashboard.svg"
+          test -f "mockups/03_ai_creative_studio.svg"
+          test -f "mockups/04_campaigns_management.svg"
+          test -f "mockups/05_ad_fatigue_detector.svg"
+          test -f "mockups/06_auth_modal.svg"
+          echo "All vector mockups verified successfully."
+
+      - name: Verify HTML Interactive Previews
+        run: |
+          test -f "01_analytics_dashboard.html"
+          test -f "02_ai_creative_studio.html"
+          test -f "03_campaigns_management.html"
+          test -f "04_ad_fatigue_detector.html"
+          test -f "05_auth_modal.html"
+          echo "All HTML preview screens verified successfully."

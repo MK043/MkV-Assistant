@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 960" width="1440" height="960">
+<defs>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap");
+    text { font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  </style>
+  <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#6366F1"/>
+    <stop offset="100%" stop-color="#8B5CF6"/>
+  </linearGradient>
+  <linearGradient id="ctaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#4F46E5"/>
+    <stop offset="100%" stop-color="#6366F1"/>
+  </linearGradient>
+</defs>
+<rect width="1440" height="960" fill="#0A0F1D"/>
+<g id="TopTabBar">
+  <rect x="0" y="0" width="1440" height="46" fill="#060913"/>
+  <line x1="0" y1="46" x2="1440" y2="46" stroke="#172033" stroke-width="1"/>
+  <g id="Tab-0">
+    <text font-family="Inter, sans-serif" x="159.0" y="27" fill="#8899A6" font-size="11.5" font-weight="500" text-anchor="middle">1. Аналітика (Dashboard)</text>
+  </g>
+  <g id="Tab-1">
+    <text font-family="Inter, sans-serif" x="445.0" y="27" fill="#8899A6" font-size="11.5" font-weight="500" text-anchor="middle">2. ШІ-Студія креативів</text>
+  </g>
+  <g id="Tab-2">
+    <text font-family="Inter, sans-serif" x="731.0" y="27" fill="#8899A6" font-size="11.5" font-weight="500" text-anchor="middle">3. Кампанії та медіабаїнг</text>
+  </g>
+  <g id="Tab-3-Active">
+    <rect x="882" y="8" width="270" height="30" rx="6" fill="#17223B" stroke="#38BDF8" stroke-width="1.2"/>
+    <text font-family="Inter, sans-serif" x="1017.0" y="27" fill="#FFFFFF" font-size="11.5" font-weight="600" text-anchor="middle">4. Детектор вигорання &amp; Хуки</text>
+  </g>
+  <g id="UserStatusPill">
+    <rect x="1176" y="8" width="240" height="30" rx="6" fill="#111827" stroke="#1F2937" stroke-width="1"/>
+    <circle cx="1194" cy="23" r="4" fill="#10B981"/>
+    <text font-family="Inter, sans-serif" x="1206" y="27" fill="#E2E8F0" font-size="11" font-weight="600">MkV Admin • Вхід виконано</text>
+  </g>
+</g>
+<g id="Sidebar">
+  <rect x="0" y="46" width="246" height="914" fill="#0D1322"/>
+  <line x1="246" y1="46" x2="246" y2="960" stroke="#172033" stroke-width="1"/>
+  <g id="BrandHeader">
+    <rect x="18" y="66" width="34" height="34" rx="8" fill="url(#brandGrad)"/>
+    <text font-family="Inter, sans-serif" x="35" y="88" fill="#FFFFFF" font-size="14" font-weight="800" text-anchor="middle">MkV</text>
+    <text font-family="Inter, sans-serif" x="60" y="80" fill="#FFFFFF" font-size="13" font-weight="700">MkV Sales Manager</text>
+    <rect x="186" y="70" width="30" height="14" rx="3" fill="#1E1B4B" stroke="#4338CA" stroke-width="0.8"/>
+    <text font-family="Inter, sans-serif" x="201" y="80.5" fill="#818CF8" font-size="8.5" font-weight="800" text-anchor="middle">CRM</text>
+    <text font-family="Inter, sans-serif" x="60" y="94" fill="#06B6D4" font-size="9" font-weight="700" letter-spacing="0.5">MEDIA BUYING OS</text>
+  </g>
+  <text font-family="Inter, sans-serif" x="20" y="142" fill="#526079" font-size="10" font-weight="700" letter-spacing="1">ОСНОВНІ МОДУЛІ</text>
+  <g id="Nav-0">
+    <circle cx="30" cy="173" r="3" fill="#334155"/>
+    <text font-family="Inter, sans-serif" x="44" y="178" fill="#8A99AD" font-size="12" font-weight="500">Аналітика (Dashboard)</text>
+  </g>
+  <g id="Nav-1">
+    <circle cx="30" cy="219" r="3" fill="#334155"/>
+    <text font-family="Inter, sans-serif" x="44" y="224" fill="#8A99AD" font-size="12" font-weight="500">ШІ-Студія креативів</text>
+    <rect x="175" y="210" width="48" height="18" rx="5" fill="#312E81"/>
+    <text font-family="Inter, sans-serif" x="199.0" y="222.5" fill="#A5B4FC" font-size="9.5" font-weight="700" text-anchor="middle">AI 2.0</text>
+  </g>
+  <g id="Nav-2">
+    <circle cx="30" cy="265" r="3" fill="#334155"/>
+    <text font-family="Inter, sans-serif" x="44" y="270" fill="#8A99AD" font-size="12" font-weight="500">Кампанії та правила</text>
+    <rect x="201" y="256" width="19" height="18" rx="5" fill="#1E293B"/>
+    <text font-family="Inter, sans-serif" x="210.5" y="268.5" fill="#94A3B8" font-size="9.5" font-weight="700" text-anchor="middle">5</text>
+  </g>
+  <g id="Nav-3-Active">
+    <rect x="12" y="292" width="222" height="38" rx="8" fill="#18233C" stroke="#4F46E5" stroke-width="1.2"/>
+    <circle cx="30" cy="311" r="4" fill="#6366F1"/>
+    <text font-family="Inter, sans-serif" x="44" y="316" fill="#FFFFFF" font-size="12" font-weight="600">Вигорання реклами</text>
+    <rect x="175" y="302" width="48" height="18" rx="5" fill="#7F1D1D"/>
+    <text font-family="Inter, sans-serif" x="199.0" y="314.5" fill="#F87171" font-size="9.5" font-weight="700" text-anchor="middle">Alert</text>
+  </g>
+  <text font-family="Inter, sans-serif" x="20" y="356" fill="#526079" font-size="10" font-weight="700" letter-spacing="1">СИСТЕМНИЙ ДОСТУП</text>
+  <g id="Nav-Auth">
+    <circle cx="30" cy="385" r="3" fill="#334155"/>
+    <text font-family="Inter, sans-serif" x="44" y="390" fill="#8A99AD" font-size="12" font-weight="500">Авторизація та API</text>
+    <rect x="175" y="376" width="48" height="18" rx="5" fill="#064E3B"/>
+    <text font-family="Inter, sans-serif" x="199" y="388.5" fill="#34D399" font-size="9.5" font-weight="700" text-anchor="middle">SSO 2.0</text>
+  </g>
+  <g id="StudentProfile">
+    <rect x="12" y="870" width="222" height="54" rx="8" fill="#111827" stroke="#1F2937" stroke-width="1"/>
+    <circle cx="36" cy="897" r="16" fill="#4F46E5"/>
+    <text font-family="Inter, sans-serif" x="36" y="902" fill="#FFFFFF" font-size="11" font-weight="800" text-anchor="middle">МБ</text>
+    <text font-family="Inter, sans-serif" x="60" y="891" fill="#FFFFFF" font-size="12" font-weight="600">Михайло Багин</text>
+    <text font-family="Inter, sans-serif" x="60" y="907" fill="#64748B" font-size="10">ФІТ УжНУ • ІПЗ-1</text>
+    <circle cx="216" cy="897" r="4" fill="#10B981"/>
+  </g>
+</g>
+<g id="SubHeader">
+  <rect x="246" y="46" width="1194" height="64" fill="#0A0F1D"/>
+  <line x1="246" y1="110" x2="1440" y2="110" stroke="#172033" stroke-width="1"/>
+  <g id="WorkspaceSelector">
+    <rect x="270" y="58" width="230" height="40" rx="8" fill="#111827" stroke="#1F2937" stroke-width="1"/>
+    <circle cx="286" cy="78" r="4" fill="#10B981"/>
+    <text font-family="Inter, sans-serif" x="298" y="82" fill="#FFFFFF" font-size="12" font-weight="600">EcoCosmetics EU</text>
+    <text font-family="Inter, sans-serif" x="410" y="82" fill="#64748B" font-size="10.5">(ID: #MKV-8942) ⌄</text>
+  </g>
+  <g id="SearchBar">
+    <rect x="512" y="58" width="280" height="40" rx="8" fill="#111827" stroke="#1F2937" stroke-width="1"/>
+    <text font-family="Inter, sans-serif" x="528" y="82" fill="#64748B" font-size="12">🔍 Пошук кампаній, хуків, правил (Ctrl+K)</text>
+  </g>
+  <g id="DatePicker">
+    <rect x="910" y="58" width="180" height="40" rx="8" fill="#111827" stroke="#1F2937" stroke-width="1"/>
+    <rect x="922" y="66" width="24" height="24" rx="4" fill="#1F2937"/>
+    <text font-family="Inter, sans-serif" x="956" y="74" fill="#E2E8F0" font-size="10" font-weight="600">1 Лист 2026</text>
+    <text font-family="Inter, sans-serif" x="956" y="87" fill="#64748B" font-size="9.5">– 30 Лист 2026</text>
+  </g>
+  <g id="Notifications">
+    <rect x="1102" y="58" width="40" height="40" rx="8" fill="#111827" stroke="#1F2937" stroke-width="1"/>
+    <text font-family="Inter, sans-serif" x="1122" y="82" fill="#94A3B8" font-size="14" text-anchor="middle">🔔</text>
+    <circle cx="1128" cy="68" r="3" fill="#EF4444"/>
+  </g>
+  <g id="CreateCampaignBtn">
+    <rect x="1152" y="58" width="150" height="40" rx="8" fill="url(#ctaGrad)"/>
+    <text font-family="Inter, sans-serif" x="1227" y="82.5" fill="#FFFFFF" font-size="12" font-weight="700" text-anchor="middle">+ Нова кампанія</text>
+  </g>
+</g>
+<g id="MainContent">
+  <text font-family="Inter, sans-serif" x="270" y="132" fill="#F59E0B" font-size="11" font-weight="700">ІНТЕЛЕКТУАЛЬНИЙ МОНІТОРИНГ • РОЗДІЛ 2.2 РОБОТИ</text>
+  <text font-family="Inter, sans-serif" x="270" y="160" fill="#FFFFFF" font-size="22" font-weight="800">Ad Fatigue Detector &amp; Creative Health Matrix</text>
+  <text font-family="Inter, sans-serif" x="270" y="180" fill="#94A3B8" font-size="11.5">Автоматичне виявлення зростання Frequency (&gt;2.8) та падіння CTR (&gt;20%). Ротація перших 3 секунд хуків.</text>
+  <rect x="1070" y="142" width="130" height="36" rx="7" fill="#18233C" stroke="#2D3E5D" stroke-width="1"/>
+  <text font-family="Inter, sans-serif" x="1135" y="165" fill="#E2E8F0" font-size="11.5" font-weight="600" text-anchor="middle">Скан креативів</text>
+  <rect x="1212" y="142" width="188" height="36" rx="7" fill="#D97706"/>
+  <text font-family="Inter, sans-serif" x="1306" y="165" fill="#FFFFFF" font-size="11.5" font-weight="700" text-anchor="middle">⭐ Згенерувати 3 свіжі хуки</text>
+  <g id="KPI-_________________AVG_FREQ_">
+    <rect x="270" y="202" width="268" height="102" rx="10" fill="#111827" stroke="#1F2937" stroke-width="1.2"/>
+    <text font-family="Inter, sans-serif" x="288" y="228" fill="#8899A6" font-size="10" font-weight="700" letter-spacing="0.5">СЕРЕДНЯ ЧАСТОТА (AVG FREQ)</text>
+    <rect x="500" y="216" width="24" height="24" rx="5" fill="#18233C"/>
+    <text font-family="Inter, sans-serif" x="512" y="232" fill="#94A3B8" font-size="12" text-anchor="middle">⚡</text>
+    <text font-family="Inter, sans-serif" x="288" y="266" fill="#FFFFFF" font-size="22" font-weight="800">2.42x</text>
+    <rect x="288" y="275" width="109.5" height="18" rx="4" fill="#7F1D1D"/>
+    <text font-family="Inter, sans-serif" x="342.75" y="287.5" fill="#EF4444" font-size="10" font-weight="700" text-anchor="middle">+18% за тиждень</text>
+    <text font-family="Inter, sans-serif" x="403.5" y="288" fill="#64748B" font-size="10.5">Поріг тривоги: 2.80x</text>
+  </g>
+  <g id="KPI-_______________________">
+    <rect x="556" y="202" width="268" height="102" rx="10" fill="#111827" stroke="#1F2937" stroke-width="1.2"/>
+    <text font-family="Inter, sans-serif" x="574" y="228" fill="#8899A6" font-size="10" font-weight="700" letter-spacing="0.5">КРЕАТИВІВ У ЗОНІ РИЗИКУ</text>
+    <rect x="786" y="216" width="24" height="24" rx="5" fill="#18233C"/>
+    <text font-family="Inter, sans-serif" x="798" y="232" fill="#94A3B8" font-size="12" text-anchor="middle">⚠️</text>
+    <text font-family="Inter, sans-serif" x="574" y="266" fill="#FFFFFF" font-size="22" font-weight="800">3 з 18</text>
+    <rect x="574" y="275" width="103.0" height="18" rx="4" fill="#7F1D1D"/>
+    <text font-family="Inter, sans-serif" x="625.5" y="287.5" fill="#EF4444" font-size="10" font-weight="700" text-anchor="middle">CTR впав &gt; 20%</text>
+    <text font-family="Inter, sans-serif" x="683.0" y="288" fill="#64748B" font-size="10.5">Потребують ротації</text>
+  </g>
+  <g id="KPI-_________________">
+    <rect x="842" y="202" width="268" height="102" rx="10" fill="#111827" stroke="#1F2937" stroke-width="1.2"/>
+    <text font-family="Inter, sans-serif" x="860" y="228" fill="#8899A6" font-size="10" font-weight="700" letter-spacing="0.5">ЗБЕРЕЖЕНО БЮДЖЕТУ</text>
+    <rect x="1072" y="216" width="24" height="24" rx="5" fill="#18233C"/>
+    <text font-family="Inter, sans-serif" x="1084" y="232" fill="#94A3B8" font-size="12" text-anchor="middle">🛡️</text>
+    <text font-family="Inter, sans-serif" x="860" y="266" fill="#FFFFFF" font-size="22" font-weight="800">$1,840</text>
+    <rect x="860" y="275" width="129.0" height="18" rx="4" fill="#064E3B"/>
+    <text font-family="Inter, sans-serif" x="924.5" y="287.5" fill="#10B981" font-size="10" font-weight="700" text-anchor="middle">Завдяки авто-паузі</text>
+    <text font-family="Inter, sans-serif" x="995.0" y="288" fill="#64748B" font-size="10.5">За листопад 2026</text>
+  </g>
+  <g id="KPI-_________3S_HOOK_RETENTION">
+    <rect x="1128" y="202" width="272" height="102" rx="10" fill="#111827" stroke="#1F2937" stroke-width="1.2"/>
+    <text font-family="Inter, sans-serif" x="1146" y="228" fill="#8899A6" font-size="10" font-weight="700" letter-spacing="0.5">СЕРЕДНІЙ 3S HOOK RETENTION</text>
+    <rect x="1362" y="216" width="24" height="24" rx="5" fill="#18233C"/>
+    <text font-family="Inter, sans-serif" x="1374" y="232" fill="#94A3B8" font-size="12" text-anchor="middle">▶</text>
+    <text font-family="Inter, sans-serif" x="1146" y="266" fill="#FFFFFF" font-size="22" font-weight="800">64.8%</text>
+    <rect x="1146" y="275" width="135.5" height="18" rx="4" fill="#064E3B"/>
+    <text font-family="Inter, sans-serif" x="1213.75" y="287.5" fill="#10B981" font-size="10" font-weight="700" text-anchor="middle">+4.2% після AI хука</text>
+    <text font-family="Inter, sans-serif" x="1287.5" y="288" fill="#64748B" font-size="10.5">Ціль &gt; 60%</text>
+  </g>
+  <g id="Chart-FrequencyVsCTR">
+    <rect x="270" y="320" width="700" height="275" rx="10" fill="#111827" stroke="#1F2937" stroke-width="1.2"/>
+    <text font-family="Inter, sans-serif" x="290" y="348" fill="#FFFFFF" font-size="13" font-weight="700">📈 Динаміка вигорання аудиторії: Frequency vs CTR (Дні 1–30)</text>
+    <circle cx="680" cy="344" r="3.5" fill="#F59E0B"/>
+    <text font-family="Inter, sans-serif" x="688" y="347" fill="#94A3B8" font-size="9.5">Частота (Frequency)</text>
+    <circle cx="800" cy="344" r="3.5" fill="#EF4444"/>
+    <text font-family="Inter, sans-serif" x="808" y="347" fill="#94A3B8" font-size="9.5">Клікабельність (CTR %)</text>
+    <line x1="310" y1="440" x2="940" y2="440" stroke="#EF4444" stroke-width="1.5" stroke-dasharray="4,4"/>
+    <text font-family="Inter, sans-serif" x="940" y="435" fill="#EF4444" font-size="9.5" font-weight="700" text-anchor="end">КРИТИЧНИЙ ПОРІГ: 2.80x FREQUENCY</text>
+    <path d="M 320 540 Q 450 520 550 490 T 700 450 T 820 400 T 940 370" fill="none" stroke="#F59E0B" stroke-width="3"/>
+    <path d="M 320 420 Q 450 430 550 445 T 700 475 T 820 520 T 940 550" fill="none" stroke="#EF4444" stroke-width="3"/>
+    <circle cx="765" cy="455" r="5" fill="#FFFFFF" stroke="#EF4444" stroke-width="2"/>
+    <rect x="730" y="470" width="165" height="34" rx="5" fill="#18233C" stroke="#334155" stroke-width="1"/>
+    <text font-family="Inter, sans-serif" x="812" y="484" fill="#FFFFFF" font-size="9.5" font-weight="700" text-anchor="middle">День 22: Момент вигорання</text>
+    <text font-family="Inter, sans-serif" x="812" y="497" fill="#94A3B8" font-size="8.5" text-anchor="middle">Частота &gt; 2.8 | CTR падіння -26%</text>
+    <text font-family="Inter, sans-serif" x="320" y="575" fill="#64748B" font-size="9.5" text-anchor="middle">День 1</text>
+    <text font-family="Inter, sans-serif" x="440" y="575" fill="#64748B" font-size="9.5" text-anchor="middle">День 6</text>
+    <text font-family="Inter, sans-serif" x="560" y="575" fill="#64748B" font-size="9.5" text-anchor="middle">День 12</text>
+    <text font-family="Inter, sans-serif" x="680" y="575" fill="#64748B" font-size="9.5" text-anchor="middle">День 18</text>
+    <text font-family="Inter, sans-serif" x="800" y="575" fill="#64748B" font-size="9.5" text-anchor="middle">День 24</text>
+    <text font-family="Inter, sans-serif" x="920" y="575" fill="#64748B" font-size="9.5" text-anchor="middle">День 30</text>
+  </g>
+  <g id="CreativeHealthCard">
+    <rect x="986" y="320" width="414" height="275" rx="10" fill="#111827" stroke="#1F2937" stroke-width="1.2"/>
+    <text font-family="Inter, sans-serif" x="1006" y="348" fill="#FFFFFF" font-size="13" font-weight="700">🕒 Стан креативної бази</text>
+    <circle cx="1012" cy="378" r="4" fill="#10B981"/>
+    <text font-family="Inter, sans-serif" x="1024" y="382" fill="#E2E8F0" font-size="11" font-weight="600">Свіжі креативи (Freq &lt; 2.0)</text>
+    <text font-family="Inter, sans-serif" x="1380" y="382" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="end">11 оголошень (61%)</text>
+    <rect x="1010" y="392" width="370" height="6" rx="3" fill="#1F2937"/>
+    <rect x="1010" y="392" width="225" height="6" rx="3" fill="#10B981"/>
+    <circle cx="1012" cy="422" r="4" fill="#F59E0B"/>
+    <text font-family="Inter, sans-serif" x="1024" y="426" fill="#E2E8F0" font-size="11" font-weight="600">Помірне виснаження (Freq 2.0–2.8)</text>
+    <text font-family="Inter, sans-serif" x="1380" y="426" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="end">4 оголошення (22%)</text>
+    <rect x="1010" y="436" width="370" height="6" rx="3" fill="#1F2937"/>
+    <rect x="1010" y="436" width="81" height="6" rx="3" fill="#F59E0B"/>
+    <circle cx="1012" cy="466" r="4" fill="#EF4444"/>
+    <text font-family="Inter, sans-serif" x="1024" y="470" fill="#E2E8F0" font-size="11" font-weight="600">Критичне вигорання (Freq &gt; 2.8)</text>
+    <text font-family="Inter, sans-serif" x="1380" y="470" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="end">3 оголошення (17%)</text>
+    <rect x="1010" y="480" width="370" height="6" rx="3" fill="#1F2937"/>
+    <rect x="1010" y="480" width="63" height="6" rx="3" fill="#EF4444"/>
+    <rect x="1006" y="504" width="374" height="74" rx="8" fill="#171F32" stroke="#2D3E5D" stroke-width="1"/>
+    <text font-family="Inter, sans-serif" x="1018" y="522" fill="#38BDF8" font-size="10.5" font-weight="700">ШІ-Порада (AI Fatigue Assistant):</text>
+    <text font-family="Inter, sans-serif" x="1018" y="538" fill="#94A3B8" font-size="10">Для 3 вигорілих креативів достатньо згенерувати нові перші</text>
+    <text font-family="Inter, sans-serif" x="1018" y="552" fill="#94A3B8" font-size="10">3 секунди (хук) без перезйомки всього відео. Це повертає CTR</text>
+    <text font-family="Inter, sans-serif" x="1018" y="566" fill="#94A3B8" font-size="10">до вихідного рівня з мінімальними витратами.</text>
+  </g>
+  <g id="CreativeRegistryTable">
+    <rect x="270" y="612" width="1130" height="328" rx="10" fill="#111827" stroke="#1F2937" stroke-width="1.2"/>
+    <text font-family="Inter, sans-serif" x="290" y="640" fill="#FFFFFF" font-size="13" font-weight="700">📄 Реєстр відеокреативів та статус вигорання</text>
+    <line x1="270" y1="655" x2="1400" y2="655" stroke="#1F2937" stroke-width="1"/>
+    <text font-family="Inter, sans-serif" x="290" y="675" fill="#526079" font-size="9.5" font-weight="700">КРЕАТИВ</text>
+    <text font-family="Inter, sans-serif" x="460" y="675" fill="#526079" font-size="9.5" font-weight="700">ПЛАТФОРМА</text>
+    <text font-family="Inter, sans-serif" x="560" y="675" fill="#526079" font-size="9.5" font-weight="700">ДНІВ У ПОКАЗІ</text>
+    <text font-family="Inter, sans-serif" x="680" y="675" fill="#526079" font-size="9.5" font-weight="700">ЧАСТОТА (FREQUENCY)</text>
+    <text font-family="Inter, sans-serif" x="820" y="675" fill="#526079" font-size="9.5" font-weight="700">ДИНАМІКА CTR</text>
+    <text font-family="Inter, sans-serif" x="950" y="675" fill="#526079" font-size="9.5" font-weight="700">3S HOOK VTR</text>
+    <text font-family="Inter, sans-serif" x="1080" y="675" fill="#526079" font-size="9.5" font-weight="700">FATIGUE RISK</text>
+    <text font-family="Inter, sans-serif" x="1260" y="675" fill="#526079" font-size="9.5" font-weight="700">РЕКОМЕНДОВАНА ШІ-ДІЯ</text>
+    <line x1="270" y1="685" x2="1400" y2="685" stroke="#1F2937" stroke-width="1"/>
+    <text font-family="Inter, sans-serif" x="290" y="712" fill="#FFFFFF" font-size="11.5" font-weight="600">Hook #1: Problem / Solution UGC</text>
+    <text font-family="Inter, sans-serif" x="460" y="712" fill="#8899A6" font-size="11">TikTok Ads</text>
+    <text font-family="Inter, sans-serif" x="560" y="712" fill="#FFFFFF" font-size="11">18 дн</text>
+    <text font-family="Inter, sans-serif" x="680" y="712" fill="#EF4444" font-size="11.5" font-weight="700">3.14x</text>
+    <text font-family="Inter, sans-serif" x="820" y="712" fill="#EF4444" font-size="11.5" font-weight="700">-24.2%</text>
+    <text font-family="Inter, sans-serif" x="950" y="712" fill="#FFFFFF" font-size="11">48.2%</text>
+    <rect x="1080" y="699" width="118.0" height="20" rx="4" fill="#7F1D1D"/>
+    <text font-family="Inter, sans-serif" x="1139.0" y="713" fill="#F87171" font-size="9.5" font-weight="700" text-anchor="middle">High (Вигорання)</text>
+    <text font-family="Inter, sans-serif" x="1260" y="712" fill="#38BDF8" font-size="11" font-weight="600">Згенерувати новий хук</text>
+    <line x1="270" y1="728" x2="1400" y2="728" stroke="#161F30" stroke-width="1"/>
+    <text font-family="Inter, sans-serif" x="290" y="765" fill="#FFFFFF" font-size="11.5" font-weight="600">Hook #2: Curiosity Shocking Stat</text>
+    <text font-family="Inter, sans-serif" x="460" y="765" fill="#8899A6" font-size="11">Meta Reels</text>
+    <text font-family="Inter, sans-serif" x="560" y="765" fill="#FFFFFF" font-size="11">8 дн</text>
+    <text font-family="Inter, sans-serif" x="680" y="765" fill="#10B981" font-size="11.5" font-weight="700">1.92x</text>
+    <text font-family="Inter, sans-serif" x="820" y="765" fill="#10B981" font-size="11.5" font-weight="700">+12.1%</text>
+    <text font-family="Inter, sans-serif" x="950" y="765" fill="#FFFFFF" font-size="11">68.4%</text>
+    <rect x="1080" y="752" width="118.0" height="20" rx="4" fill="#064E3B"/>
+    <text font-family="Inter, sans-serif" x="1139.0" y="766" fill="#34D399" font-size="9.5" font-weight="700" text-anchor="middle">Low (Оптимально)</text>
+    <text font-family="Inter, sans-serif" x="1260" y="765" fill="#38BDF8" font-size="11" font-weight="600">Масштабувати бюджет</text>
+    <line x1="270" y1="781" x2="1400" y2="781" stroke="#161F30" stroke-width="1"/>
+    <text font-family="Inter, sans-serif" x="290" y="818" fill="#FFFFFF" font-size="11.5" font-weight="600">Hook #3: Before / After Story</text>
+    <text font-family="Inter, sans-serif" x="460" y="818" fill="#8899A6" font-size="11">Instagram</text>
+    <text font-family="Inter, sans-serif" x="560" y="818" fill="#FFFFFF" font-size="11">24 дн</text>
+    <text font-family="Inter, sans-serif" x="680" y="818" fill="#F59E0B" font-size="11.5" font-weight="700">2.88x</text>
+    <text font-family="Inter, sans-serif" x="820" y="818" fill="#F59E0B" font-size="11.5" font-weight="700">-18.5%</text>
+    <text font-family="Inter, sans-serif" x="950" y="818" fill="#FFFFFF" font-size="11">52.0%</text>
+    <rect x="1080" y="805" width="150.5" height="20" rx="4" fill="#78350F"/>
+    <text font-family="Inter, sans-serif" x="1155.25" y="819" fill="#FCD34D" font-size="9.5" font-weight="700" text-anchor="middle">Moderate (Виснаження)</text>
+    <text font-family="Inter, sans-serif" x="1260" y="818" fill="#38BDF8" font-size="11" font-weight="600">Підготувати ротацію</text>
+    <line x1="270" y1="834" x2="1400" y2="834" stroke="#161F30" stroke-width="1"/>
+    <text font-family="Inter, sans-serif" x="290" y="871" fill="#FFFFFF" font-size="11.5" font-weight="600">Hook #4: Trend-Jacking Audio</text>
+    <text font-family="Inter, sans-serif" x="460" y="871" fill="#8899A6" font-size="11">TikTok Ads</text>
+    <text font-family="Inter, sans-serif" x="560" y="871" fill="#FFFFFF" font-size="11">5 дн</text>
+    <text font-family="Inter, sans-serif" x="680" y="871" fill="#10B981" font-size="11.5" font-weight="700">1.25x</text>
+    <text font-family="Inter, sans-serif" x="820" y="871" fill="#10B981" font-size="11.5" font-weight="700">+31.0%</text>
+    <text font-family="Inter, sans-serif" x="950" y="871" fill="#FFFFFF" font-size="11">74.1%</text>
+    <rect x="1080" y="858" width="118.0" height="20" rx="4" fill="#064E3B"/>
+    <text font-family="Inter, sans-serif" x="1139.0" y="872" fill="#34D399" font-size="9.5" font-weight="700" text-anchor="middle">Low (Оптимально)</text>
+    <text font-family="Inter, sans-serif" x="1260" y="871" fill="#38BDF8" font-size="11" font-weight="600">Моніторинг</text>
+    <line x1="270" y1="887" x2="1400" y2="887" stroke="#161F30" stroke-width="1"/>
+  </g>
+</g>
+</svg>
