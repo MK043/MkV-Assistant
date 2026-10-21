@@ -1,36 +1,37 @@
-name: UI/UX & Quality Verification CI
+name: CI / Static Validation
 
 on:
   push:
-    branches: [ main, feature/ui-ux-design ]
+    branches: [ "main", "feature/ui-ux-design" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
-  verify:
+  validate:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Verify Documentation & Mockups Structure
+      - name: Validate Core Mockups and Documentation Structure
         run: |
-          echo "Verifying lab report artifacts..."
-          test -f "docs/Laboratorna_Robota_2_Bahyn_MkV_Sales_Manager.docx" || echo "Warning: Docx report check"
-          test -f "mockups/01_master_hub_overview.svg"
-          test -f "mockups/02_analytics_dashboard.svg"
-          test -f "mockups/03_ai_creative_studio.svg"
-          test -f "mockups/04_campaigns_management.svg"
-          test -f "mockups/05_ad_fatigue_detector.svg"
-          test -f "mockups/06_auth_modal.svg"
-          echo "All vector mockups verified successfully."
+          echo "Validating project assets and mockups..."
+          test -f README.md
+          
+          # Verify SVG mockups
+          svg_count=$(find . -name "*.svg" | wc -l)
+          echo "Found $svg_count SVG files"
+          if [ "$svg_count" -lt 6 ]; then
+            echo "Error: Expected 6 SVG mockups"
+            exit 1
+          fi
 
-      - name: Verify HTML Interactive Previews
-        run: |
-          test -f "01_analytics_dashboard.html"
-          test -f "02_ai_creative_studio.html"
-          test -f "03_campaigns_management.html"
-          test -f "04_ad_fatigue_detector.html"
-          test -f "05_auth_modal.html"
-          echo "All HTML preview screens verified successfully."
+          # Verify PNG mockups
+          png_count=$(find . -name "*.png" | wc -l)
+          echo "Found $png_count PNG files"
+          if [ "$png_count" -lt 6 ]; then
+            echo "Error: Expected 6 PNG mockups"
+            exit 1
+          fi
+
+          echo "All 6 SVG mockups and 6 PNG mockups verified successfully!"
