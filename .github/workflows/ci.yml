@@ -1,0 +1,37 @@
+name: CI / Static Validation
+
+on:
+  push:
+    branches: [ "main", "feature/ui-ux-design" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Validate Core Mockups and Documentation Structure
+        run: |
+          echo "Validating project assets and mockups..."
+          test -f README.md
+          
+          # Verify SVG mockups
+          svg_count=$(find . -name "*.svg" | wc -l)
+          echo "Found $svg_count SVG files"
+          if [ "$svg_count" -lt 6 ]; then
+            echo "Error: Expected 6 SVG mockups"
+            exit 1
+          fi
+
+          # Verify PNG mockups
+          png_count=$(find . -name "*.png" | wc -l)
+          echo "Found $png_count PNG files"
+          if [ "$png_count" -lt 6 ]; then
+            echo "Error: Expected 6 PNG mockups"
+            exit 1
+          fi
+
+          echo "All 6 SVG mockups and 6 PNG mockups verified successfully!"

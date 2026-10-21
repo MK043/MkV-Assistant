@@ -34,34 +34,24 @@
 Репозиторій містить чисту та впорядковану структуру напрацювань:
 
 ```text
-├── 01_Головні_макети_проєкту (4 модулі + вхід)/  # Векторні SVG-макети для імпорту у Figma
+├── .github/
+│   └── workflows/
+│       └── ci.yml                               # GitHub Actions автоматична валідація макетів
+├── 01_Головні_макети_проєкту (4 модулі + вхід)/ # Векторні SVG-макети для імпорту у Figma (6 файлів)
 │   ├── 01_Головний_огляд_платформи (Рис 1.1).svg
 │   ├── 02_Дашборд_аналітики (Рис 2.1).svg
 │   ├── 03_ШІ_Студія_креативів (Рис 2.2).svg
 │   ├── 04_Кампанії_та_медіабаїнг (Рис 2.3).svg
 │   ├── 05_Детектор_вигорання_та_хуки (Рис 2.4).svg
 │   └── 06_Модальне_вікно_авторизації (Рис 2.5).svg
-├── ФОТО_МОКАПИ_PNG/                              # Повний набір растрових мокапів високої якості
-│   ├── 00_Master_Hub_Overview.png
-│   ├── 01_analytics_dashboard_mockup.png
-│   ├── 02_ai_creative_studio_mockup.png
-│   ├── 03_Campaigns_Management_Rules.png
-│   ├── 04_Ad_Fatigue_Detector.png
-│   ├── 05_Knowledge_Base_CAPI.png
-│   ├── 06_Audiences_iOS14_Attribution.png
-│   ├── 07_Integrations_APIs.png
-│   ├── Fig_1_1_Master_Hub.png
-│   ├── Fig_2_1_Analytics_Dashboard.png
-│   ├── Fig_2_2_AI_Creative_Studio.png
-│   ├── Fig_2_3_Campaigns_Management.png
-│   ├── Fig_2_4_Ad_Fatigue_Detector.png
-│   ├── Fig_2_5_Auth_Modal.png
-│   ├── Fig_3_1_Analytics_Dashboard.png
-│   ├── Fig_3_1_GitHub_Repo_Structure.png
-│   ├── Fig_3_2_AI_Studio_Storyboard.png
-│   └── Fig_3_2_Reviewer_romanbuchuk.png
-├── .gitignore
-└── README.md
+├── ФОТО_МОКАПИ_PNG/                             # 6 фінальних растрових мокапів високої якості
+│   ├── 01_Головний_огляд_платформи.png
+│   ├── 02_Дашборд_аналітики.png
+│   ├── 03_ШІ_Студія_креативів.png
+│   ├── 04_Кампанії_та_медіабаїнг.png
+│   ├── 05_Детектор_вигорання_та_хуки.png
+│   └── 06_Модальне_вікно_авторизації.png
+└── README.md                                    # Документація проєкту
 ```
 
 ---
@@ -90,31 +80,22 @@
 ## 🖥️ Галерея фінального UI/UX дизайну мокапів
 
 ### 1. Головний огляд платформи (Master Hub Overview)
-![Master Hub](ФОТО_МОКАПИ_PNG/00_Master_Hub_Overview.png)
+![Master Hub](ФОТО_МОКАПИ_PNG/01_Головний_огляд_платформи.png)
 
 ### 2. Панель крос-платформної аналітики (Analytics Dashboard)
-![Analytics Dashboard](ФОТО_МОКАПИ_PNG/01_analytics_dashboard_mockup.png)
+![Analytics Dashboard](ФОТО_МОКАПИ_PNG/02_Дашборд_аналітики.png)
 
 ### 3. Креативна ШІ-студія та відео-розкадрування (AI Creative Studio)
-![AI Creative Studio](ФОТО_МОКАПИ_PNG/02_ai_creative_studio_mockup.png)
+![AI Creative Studio](ФОТО_МОКАПИ_PNG/03_ШІ_Студія_креативів.png)
 
 ### 4. Центр управління кампаніями та медіабаїнгом (Campaigns & Media Buying)
-![Campaigns Management](ФОТО_МОКАПИ_PNG/03_Campaigns_Management_Rules.png)
+![Campaigns Management](ФОТО_МОКАПИ_PNG/04_Кампанії_та_медіабаїнг.png)
 
 ### 5. Детектор вигорання аудиторії та ротація хуків (Ad Fatigue Detector & Hooks)
-![Ad Fatigue Detector](ФОТО_МОКАПИ_PNG/04_Ad_Fatigue_Detector.png)
+![Ad Fatigue Detector](ФОТО_МОКАПИ_PNG/05_Детектор_вигорання_та_хуки.png)
 
 ### 6. Модуль безпечної авторизації користувача (Auth Modal)
-![Auth Modal](ФОТО_МОКАПИ_PNG/Fig_2_5_Auth_Modal.png)
-
-### 7. Інтерактивна база знань та чеклисти CAPI (Knowledge Base & Setup Guides)
-![Knowledge Base](ФОТО_МОКАПИ_PNG/05_Knowledge_Base_CAPI.png)
-
-### 8. Аудиторії та мультиплатформна атрибуція (Audiences & Attribution)
-![Audiences and Attribution](ФОТО_МОКАПИ_PNG/06_Audiences_iOS14_Attribution.png)
-
-### 9. Центр офіційних API-інтеграцій (Official API Integrations)
-![API Integrations](ФОТО_МОКАПИ_PNG/07_Integrations_APIs.png)
+![Auth Modal](ФОТО_МОКАПИ_PNG/06_Модальне_вікно_авторизації.png)
 
 ---
 
@@ -122,14 +103,14 @@
 
 1. Відкрийте [Figma](https://www.figma.com/) та створіть новий файл проєкту (*New design file*).
 2. Відкрийте локальну папку `01_Головні_макети_проєкту (4 модулі + вхід)/`.
-3. Виділіть усі `.svg` файли та просто перетягніть їх мишею (*Drag-and-Drop*) на робоче полотно Figma.
+3. Виділіть усі 6 `.svg` файлів та перетягніть їх (*Drag-and-Drop*) на робоче полотно Figma.
 4. Векторні макети автоматично розпакуються у вигляді фреймів 1440×960 px зі збереженням шрифтів, кольорів, векторних іконок та ієрархії шарів для подальшої верстки на React.
 
 ---
 
 ## 🎯 Висновки
 
-1. У ході виконання роботи було спроєктовано завершену компонентну UI/UX архітектуру CRM-платформи **«MkV Sales Manager»** для таргетологів та SMM-фахівців (8 повнофункціональних модулів + модальне вікно корпоративної автентифікації).
+1. У ході виконання роботи було спроєктовано завершену компонентну UI/UX архітектуру CRM-платформи **«MkV Sales Manager»** для таргетологів та SMM-фахівців (4 основні модулі + головний хаб + модальне вікно корпоративної автентифікації).
 2. Сформовано темну дизайн-систему (Slate `#0F172A`), готову до компонентної реалізації на базі **React 18 та Tailwind CSS**.
-3. Репозиторій структуровано згідно з вимогами: завантажено векторні макети SVG, повний набір растрових ілюстрацій PNG та файл документації.
+3. Репозиторій структуровано згідно з вимогами: завантажено векторні макети SVG, 6 основних растрових ілюстрацій PNG, автоматизований пайплайн CI та файл документації.
 4. Налаштовано середовище версіонування Git/GitHub та підключено рецензента [@romanbuchuk](https://github.com/romanbuchuk) для перевірки напрацювань.
