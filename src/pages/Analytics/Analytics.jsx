@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import MetricCard from '../../components/MetricCard/MetricCard';
+import RoasCalculator from '../../components/RoasCalculator/RoasCalculator';
 import { useApp } from '../../context/AppContext';
 import styles from './Analytics.module.css';
 
@@ -13,12 +14,25 @@ export default function Analytics() {
     return matchesSearch && matchesPlatform;
   });
 
-  const totalSpend = filteredCampaigns.reduce((acc, c) => acc + (c.spend || 0), 0) || 14820;
-  const totalLeads = filteredCampaigns.reduce((acc, c) => acc + (c.leads || 0), 0) || 1240;
+  const dateMultiplier = {
+    'Сьогодні': 0.08,
+    'Останні 7 днів': 0.28,
+    'Останні 30 днів': 1.0,
+    'Останні 90 днів': 2.9,
+  }[dateRange] || 1.0;
+
+  const rawSpend = filteredCampaigns.reduce((acc, c) => acc + (c.spend || 0), 0) || 14820;
+  const rawLeads = filteredCampaigns.reduce((acc, c) => acc + (c.leads || 0), 0) || 1240;
+
+  const totalSpend = Math.round(rawSpend * dateMultiplier);
+  const totalLeads = Math.round(rawLeads * dateMultiplier);
   const avgRoas = filteredCampaigns.length
     ? (filteredCampaigns.reduce((acc, c) => acc + Number(c.roas || 3.5), 0) / filteredCampaigns.length).toFixed(2)
     : '3.82';
   const cpl = totalLeads > 0 ? (totalSpend / totalLeads).toFixed(2) : '11.95';
+
+  const metaSpend = Math.round(8920 * dateMultiplier);
+  const tikTokSpend = Math.round(5900 * dateMultiplier);
 
   return (
     <div>
@@ -33,7 +47,7 @@ export default function Analytics() {
           <MetricCard
             title="Витрачений бюджет"
             value={`$${totalSpend.toLocaleString()}`}
-            statusText="↑ +8.4% у нормі"
+            statusText={`Період: ${dateRange}`}
             statusType="positive"
           />
           <MetricCard
@@ -69,10 +83,10 @@ export default function Analytics() {
             </div>
             <div className={styles.chartLegend}>
               {(activePlatformFilter === 'all' || activePlatformFilter === 'Meta Ads') && (
-                <span className={styles.legendMeta}>● Meta Ads ($8,920)</span>
+                <span className={styles.legendMeta}>● Meta Ads (${metaSpend.toLocaleString()})</span>
               )}
               {(activePlatformFilter === 'all' || activePlatformFilter === 'TikTok Ads') && (
-                <span className={styles.legendTikTok}>● TikTok Ads ($5,900)</span>
+                <span className={styles.legendTikTok}>● TikTok Ads (${tikTokSpend.toLocaleString()})</span>
               )}
             </div>
           </div>
@@ -129,13 +143,11 @@ export default function Analytics() {
           </div>
 
           <div className={styles.chartAxis}>
-            <span>1 Лист</span>
-            <span>5 Лист</span>
-            <span>10 Лист</span>
-            <span>15 Лист</span>
-            <span>20 Лист</span>
-            <span>25 Лист</span>
-            <span>30 Лист</span>
+            <span>Початок періоду</span>
+            <span>+25% часу</span>
+            <span>Середина</span>
+            <span>+75% часу</span>
+            <span>Сьогодні</span>
           </div>
         </div>
 
@@ -150,42 +162,49 @@ export default function Analytics() {
                 <th>НАЗВА КАМПАНІЇ</th>
                 <th>ПЛАТФОРМА</th>
                 <th>БЮДЖЕТ/ДЕНЬ</th>
-                <th>ВИТРАТИ</th>
+                <th>ВИТРАТИ ({dateRange})</th>
                 <th>ЛІДИ</th>
                 <th>ROAS</th>
                 <th>СТАТУС</th>
               </tr>
             </thead>
             <tbody>
-              {filteredCampaigns.map((c) => (
-                <tr key={c.id}>
-                  <td className={styles.campaignName}>{c.name}</td>
-                  <td>
-                    <span className={`${styles.platformPill} ${!c.isMeta ? styles.platformTikTok : ''}`}>
-                      {c.platform}
-                    </span>
-                  </td>
-                  <td>${c.budget}/день</td>
-                  <td style={{ fontWeight: 600 }}>${(c.spend || 0).toLocaleString()}</td>
-                  <td>{c.leads}</td>
-                  <td>
-                    <span
-                      className={styles.roasVal}
-                      style={{ color: parseFloat(c.roas) >= 3.0 ? 'var(--color-success)' : 'var(--color-warning)' }}
-                    >
-                      {c.roas}x
-                    </span>
-                  </td>
-                  <td>
-                    <span className={c.active ? styles.statusActive : styles.statusPaused}>
-                      {c.active ? 'Активна' : 'На паузі'}
-                    </span>
-                  </td>
-                </tr>
-              ))}
+              {filteredCampaigns.map((c) => {
+                const cSpend = Math.round((c.spend || 0) * dateMultiplier);
+                const cLeads = Math.round((c.leads || 0) * dateMultiplier);
+                return (
+                  <tr key={c.id}>
+                    <td className={styles.campaignName}>{c.name}</td>
+                    <td>
+                      <span className={`${styles.platformPill} ${!c.isMeta ? styles.platformTikTok : ''}`}>
+                        {c.platform}
+                      </span>
+                    </td>
+                    <td>${c.budget}/день</td>
+                    <td style={{ fontWeight: 600 }}>${cSpend.toLocaleString()}</td>
+                    <td>{cLeads}</td>
+                    <td>
+                      <span
+                        className={styles.roasVal}
+                        style={{ color: parseFloat(c.roas) >= 3.0 ? 'var(--color-success)' : 'var(--color-warning)' }}
+                      >
+                        {c.roas}x
+                      </span>
+                    </td>
+                    <td>
+                      <span className={c.active ? styles.statusActive : styles.statusPaused}>
+                        {c.active ? 'Активна' : 'На паузі'}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
+
+        {/* Unit Economics & Scale Simulator */}
+        <RoasCalculator />
       </div>
     </div>
   );

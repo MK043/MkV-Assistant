@@ -4,6 +4,7 @@ import { useApp } from './context/AppContext';
 import Sidebar from './components/Sidebar/Sidebar';
 import AuthModal from './components/AuthModal/AuthModal';
 import CreateCampaignModal from './components/CreateCampaignModal/CreateCampaignModal';
+import EditCampaignModal from './components/EditCampaignModal/EditCampaignModal';
 import MasterHub from './pages/MasterHub/MasterHub';
 import Analytics from './pages/Analytics/Analytics';
 import CreativeStudio from './pages/CreativeStudio/CreativeStudio';
@@ -13,7 +14,14 @@ import NotFound from './pages/NotFound/NotFound';
 import styles from './App.module.css';
 
 export default function App() {
-  const { isCreateModalOpen, setIsCreateModalOpen, handleCreateCampaign } = useApp();
+  const {
+    isCreateModalOpen,
+    setIsCreateModalOpen,
+    handleCreateCampaign,
+    editingCampaign,
+    setEditingCampaign,
+    handleUpdateCampaign,
+  } = useApp();
 
   return (
     <div className={styles.appLayout}>
@@ -36,6 +44,12 @@ export default function App() {
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         onCreate={handleCreateCampaign}
+      />
+      <EditCampaignModal
+        campaign={editingCampaign}
+        isOpen={Boolean(editingCampaign)}
+        onClose={() => setEditingCampaign(null)}
+        onSave={handleUpdateCampaign}
       />
     </div>
   );

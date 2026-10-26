@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Zap, Play, Pause, Loader2 } from 'lucide-react';
+import { Zap, Play, Pause, Loader2, Copy, Download, Plus, CheckCircle2 } from 'lucide-react';
 import Navbar from '../../components/Navbar/Navbar';
 import { useApp } from '../../context/AppContext';
 import styles from './CreativeStudio.module.css';
 
 export default function CreativeStudio() {
-  const { storyboard, handleGenerateStoryboard } = useApp();
+  const { storyboard, handleGenerateStoryboard, handleAddCustomScene } = useApp();
   
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -15,6 +15,12 @@ export default function CreativeStudio() {
   const [format, setFormat] = useState('TikTok / Reels (9:16 Вертикальне)');
   const [hookType, setHookType] = useState('Проблема → Рішення (Problem-Solution)');
   const [tone, setTone] = useState('Дружня, експертна, без реклами в лоб');
+
+  // Custom Scene state
+  const [showAddScene, setShowAddScene] = useState(false);
+  const [customVisual, setCustomVisual] = useState('');
+  const [customQuote, setCustomQuote] = useState('');
+  const [feedback, setFeedback] = useState('');
 
   // Audio simulation timer
   useEffect(() => {
@@ -56,6 +62,70 @@ export default function CreativeStudio() {
     title: 'EcoCosmetics — Ранковий догляд',
     duration: '20 секунд',
     scenes: [],
+  };
+
+  const handleCopyScript = () => {
+    if (!currentBoard.scenes || currentBoard.scenes.length === 0) return;
+    const lines = [
+      `НАЗВА: ${currentBoard.title}`,
+      `ТРИВАЛІСТЬ: ${currentBoard.duration}`,
+      `ФОРМАТ: ${format}`,
+      '----------------------------------------',
+      ...currentBoard.scenes.map((s) =>
+        `[СЦЕНА ${s.number} (${s.time}) — ${s.title}]\nВІЗУАЛ: ${s.visual}\nОЗВУЧКА: ${s.quote}\nТЕГ: ${s.tag}\n`
+      ),
+    ];
+    navigator.clipboard.writeText(lines.join('\n'));
+    setFeedback('Сценарій та таймлайни успішно скопійовано для монтажера!');
+    setTimeout(() => setFeedback(''), 4000);
+  };
+
+  const handleDownloadBrief = () => {
+    if (!currentBoard.scenes || currentBoard.scenes.length === 0) return;
+    const content = [
+      `============================================================`,
+      `ТЕХНІЧНЕ ЗАВДАННЯ ДЛЯ ВІДЕОМОНТАЖУ ТА ЗЙОМКИ (UGC BRIEF)`,
+      `Платформа: MkV Sales Manager CRM • Media Buying OS`,
+      `============================================================\n`,
+      `Продукт: ${productName}`,
+      `Формат ролика: ${format}`,
+      `Психологічний хук: ${hookType}`,
+      `Тональність озвучки: ${tone}`,
+      `Загальний хронометраж: ${currentBoard.duration}\n`,
+      `ПОСЛІДОВНІСТЬ СЦЕН ТА РОЗКАДРОВКА:\n`,
+      ...currentBoard.scenes.map((s) => (
+        `--- СЦЕНА ${s.number} (${s.time}) ---\n` +
+        `Фокус: ${s.title}\n` +
+        `Візуальний ряд: ${s.visual}\n` +
+        `Закадровий текст / Субтитри: ${s.quote}\n` +
+        `Цільовий KPI: ${s.tag}\n`
+      )),
+      `\nСтворено автоматично через ШІ-Студію MkV CRM (УжНУ 2026).`
+    ].join('\n');
+
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `Brief_${productName.replace(/\s+/g, '_')}_Storyboard.txt`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleAddSceneSubmit = async (e) => {
+    e.preventDefault();
+    if (!customVisual.trim() || !customQuote.trim()) return;
+
+    await handleAddCustomScene({
+      visual: customVisual.trim(),
+      quote: customQuote.trim(),
+      tag: 'Користувацька сцена',
+    });
+
+    setCustomVisual('');
+    setCustomQuote('');
+    setShowAddScene(false);
   };
 
   const progressPercent = (currentTime / 20) * 100;
@@ -153,14 +223,84 @@ export default function CreativeStudio() {
         {/* Right Column: Generated Storyboard */}
         <div className={styles.rightCol}>
           <div className={styles.panelCard}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+            {feedback && (
+              <div className={styles.toastSuccess}>
+                <CheckCircle2 size={16} />
+                <span>{feedback}</span>
+              </div>
+            )}
+
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
               <div>
                 <h2 className={styles.panelTitle}>Готова розкадровка: «{currentBoard.title}»</h2>
                 <p className={styles.panelSub} style={{ margin: 0 }}>
                   ● Готово до зйомки та монтажу (тривалість {currentBoard.duration})
                 </p>
               </div>
+
+              <div className={styles.headerActions}>
+                <button
+                  type="button"
+                  className={styles.toolBtn}
+                  onClick={handleCopyScript}
+                  title="Скопіювати текст сценарію у буфер обміну"
+                >
+                  <Copy size={14} />
+                  <span>Копіювати текст</span>
+                </button>
+                <button
+                  type="button"
+                  className={styles.toolBtn}
+                  onClick={handleDownloadBrief}
+                  title="Завантажити детальне ТЗ для монтажера"
+                >
+                  <Download size={14} />
+                  <span>Експорт ТЗ (.txt)</span>
+                </button>
+                <button
+                  type="button"
+                  className={styles.toolBtn}
+                  onClick={() => setShowAddScene(!showAddScene)}
+                  title="Додати власну сцену"
+                >
+                  <Plus size={14} />
+                  <span>+ Сцена</span>
+                </button>
+              </div>
             </div>
+
+            {/* Custom Scene Form */}
+            {showAddScene && (
+              <form onSubmit={handleAddSceneSubmit} className={styles.addSceneCard}>
+                <span className={styles.addSceneTitle}>+ Додати власну сцену до сценарію</span>
+                <div className={styles.addSceneRow}>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Опис візуалу (напр. Макро-кадр нанесення)"
+                    className={styles.input}
+                    value={customVisual}
+                    onChange={(e) => setCustomVisual(e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    required
+                    placeholder="Озвучка (напр. «Відчуй різницю з 1 дня...»)"
+                    className={styles.input}
+                    value={customQuote}
+                    onChange={(e) => setCustomQuote(e.target.value)}
+                  />
+                </div>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button type="submit" className={styles.toolBtn} style={{ background: 'var(--accent-primary)', color: '#fff' }}>
+                    Зберегти сцену
+                  </button>
+                  <button type="button" className={styles.toolBtn} onClick={() => setShowAddScene(false)}>
+                    Скасувати
+                  </button>
+                </div>
+              </form>
+            )}
 
             {currentBoard.scenes && currentBoard.scenes.map((scene, idx) => {
               const cardClass = idx === 1 ? styles.sceneCard2 : idx === 2 ? styles.sceneCard3 : '';

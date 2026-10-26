@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Shield, TrendingUp } from 'lucide-react';
+import { Plus, Shield, TrendingUp, Edit3, Copy, Trash2, Download, RefreshCw, Activity } from 'lucide-react';
 import Navbar from '../../components/Navbar/Navbar';
 import { useApp } from '../../context/AppContext';
 import styles from './Campaigns.module.css';
@@ -8,6 +8,13 @@ export default function Campaigns() {
   const {
     campaigns,
     handleToggleCampaign,
+    handleDuplicateCampaign,
+    handleDeleteCampaign,
+    handleSimulateLiveTick,
+    setEditingCampaign,
+    liveAlert,
+    liveSyncActive,
+    setLiveSyncActive,
     searchQuery,
     activePlatformFilter,
     setIsCreateModalOpen,
@@ -72,6 +79,30 @@ export default function Campaigns() {
     return parseFloat(String(val).replace(/[^0-9.]/g, '')) || 0;
   };
 
+  const handleExportCsv = () => {
+    const headers = ['ID,Назва кампанії,Платформа,Добовий бюджет ($),Витрати ($),Ліди,CPA ($),ROAS,Статус'];
+    const rows = campaigns.map((c) => [
+      c.id,
+      `"${c.name}"`,
+      `"${c.platform}"`,
+      c.budget,
+      c.spend,
+      c.leads || 0,
+      c.cpa,
+      c.roas,
+      c.active ? 'Активна' : 'На паузі',
+    ].join(','));
+    const csvContent = '\uFEFF' + [headers, ...rows].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `MkV_Campaigns_Report_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div>
       <Navbar
@@ -80,6 +111,13 @@ export default function Campaigns() {
       />
 
       <div className={styles.container}>
+        {liveAlert && (
+          <div className={styles.alertBanner}>
+            <Activity size={16} />
+            <span>{liveAlert}</span>
+          </div>
+        )}
+
         {/* Filter Tabs & New Campaign CTA */}
         <div className={styles.topBar}>
           <div className={styles.tabsList}>
@@ -106,14 +144,46 @@ export default function Campaigns() {
             </button>
           </div>
 
-          <button
-            type="button"
-            className={styles.primaryBtn}
-            onClick={() => setIsCreateModalOpen(true)}
-          >
-            <Plus size={16} />
-            <span>Нова кампанія</span>
-          </button>
+          <div className={styles.actionsWrapper}>
+            <button
+              type="button"
+              className={`${styles.secondaryBtn} ${liveSyncActive ? styles.liveBtnActive : ''}`}
+              onClick={() => setLiveSyncActive(!liveSyncActive)}
+              title="Автоматичний пульс лідів кожні 7 секунд"
+            >
+              <Activity size={15} />
+              <span>{liveSyncActive ? '● Live Sync (Увімкнено)' : 'Live Sync (Пульс)'}</span>
+            </button>
+
+            <button
+              type="button"
+              className={styles.secondaryBtn}
+              onClick={handleSimulateLiveTick}
+              title="Оновити витрати та отримати нові заявки"
+            >
+              <RefreshCw size={15} />
+              <span>Оновити метрики</span>
+            </button>
+
+            <button
+              type="button"
+              className={styles.secondaryBtn}
+              onClick={handleExportCsv}
+              title="Завантажити звіт кампаній у форматі CSV"
+            >
+              <Download size={15} />
+              <span>Експорт CSV</span>
+            </button>
+
+            <button
+              type="button"
+              className={styles.primaryBtn}
+              onClick={() => setIsCreateModalOpen(true)}
+            >
+              <Plus size={16} />
+              <span>Нова кампанія</span>
+            </button>
+          </div>
         </div>
 
         {/* Campaigns Table */}
@@ -128,13 +198,14 @@ export default function Campaigns() {
                 <th>ВИТРАТИ</th>
                 <th>CPA (ЛІД)</th>
                 <th>ROAS</th>
-                <th>ТОГЛ ON/OFF</th>
+                <th>СТАТУС</th>
+                <th>ДІЇ ТАРГЕТОЛОГА</th>
               </tr>
             </thead>
             <tbody>
               {filteredCampaigns.length === 0 ? (
                 <tr>
-                  <td colSpan={7} style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
+                  <td colSpan={8} style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
                     Не знайдено кампаній за вибраними критеріями пошуку.
                   </td>
                 </tr>
@@ -169,6 +240,34 @@ export default function Campaigns() {
                         />
                         <span className={styles.slider} />
                       </label>
+                    </td>
+                    <td>
+                      <div className={styles.rowActions}>
+                        <button
+                          type="button"
+                          className={styles.iconBtn}
+                          title="Редагувати параметри кампанії"
+                          onClick={() => setEditingCampaign(c)}
+                        >
+                          <Edit3 size={14} />
+                        </button>
+                        <button
+                          type="button"
+                          className={styles.iconBtn}
+                          title="Дублювати кампанію"
+                          onClick={() => handleDuplicateCampaign(c.id)}
+                        >
+                          <Copy size={14} />
+                        </button>
+                        <button
+                          type="button"
+                          className={`${styles.iconBtn} ${styles.deleteBtn}`}
+                          title="Видалити або архівувати"
+                          onClick={() => handleDeleteCampaign(c.id)}
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))

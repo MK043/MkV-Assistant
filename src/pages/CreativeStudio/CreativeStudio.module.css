@@ -289,3 +289,67 @@
   height: 100%;
   background: var(--accent-primary);
 }
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.toolBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #070B14;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  transition: all var(--transition-fast);
+}
+
+.toolBtn:hover {
+  background-color: #172036;
+  color: #FFFFFF;
+  border-color: var(--accent-primary);
+}
+
+.addSceneCard {
+  background-color: #070B14;
+  border: 1px dashed var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  margin-bottom: 16px;
+}
+
+.addSceneTitle {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--accent-primary-light);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.addSceneRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.toastSuccess {
+  background-color: var(--color-success-bg);
+  border: 1px solid var(--color-success-border);
+  color: var(--color-success);
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

@@ -114,6 +114,90 @@ export const mockApi = {
     return updated.find((c) => c.id === id);
   },
 
+  async updateCampaign(id, fields) {
+    await new Promise((r) => setTimeout(r, 150));
+    const current = getStorage(STORAGE_KEYS.CAMPAIGNS, initialCampaigns);
+    const updated = current.map((c) => {
+      if (c.id === id) {
+        const budgetNum = Number(fields.budget) || c.budget;
+        const roasNum = Number(fields.roas) || c.roas;
+        return {
+          ...c,
+          ...fields,
+          budget: budgetNum,
+          roas: roasNum,
+          isMeta: fields.platform ? fields.platform !== 'TikTok Ads' : c.isMeta,
+        };
+      }
+      return c;
+    });
+    setStorage(STORAGE_KEYS.CAMPAIGNS, updated);
+    return updated.find((c) => c.id === id);
+  },
+
+  async duplicateCampaign(id) {
+    await new Promise((r) => setTimeout(r, 120));
+    const current = getStorage(STORAGE_KEYS.CAMPAIGNS, initialCampaigns);
+    const original = current.find((c) => c.id === id);
+    if (!original) return null;
+
+    const copy = {
+      ...original,
+      id: Date.now(),
+      name: `${original.name}_Copy`,
+      spend: 0,
+      leads: 0,
+      active: true,
+    };
+    const updated = [copy, ...current];
+    setStorage(STORAGE_KEYS.CAMPAIGNS, updated);
+    return copy;
+  },
+
+  async deleteCampaign(id) {
+    await new Promise((r) => setTimeout(r, 100));
+    const current = getStorage(STORAGE_KEYS.CAMPAIGNS, initialCampaigns);
+    const updated = current.filter((c) => c.id !== id);
+    setStorage(STORAGE_KEYS.CAMPAIGNS, updated);
+    return updated;
+  },
+
+  async simulateLiveTick() {
+    await new Promise((r) => setTimeout(r, 100));
+    const current = getStorage(STORAGE_KEYS.CAMPAIGNS, initialCampaigns);
+    let totalAddedSpend = 0;
+    let totalAddedLeads = 0;
+
+    const updated = current.map((c) => {
+      if (!c.active) return c;
+      const spendInc = Math.round((Math.random() * 8 + 2) * 10) / 10;
+      const leadInc = Math.random() > 0.45 ? 1 : 0;
+      totalAddedSpend += spendInc;
+      totalAddedLeads += leadInc;
+
+      const newSpend = Math.round(((c.spend || 0) + spendInc) * 100) / 100;
+      const newLeads = (c.leads || 0) + leadInc;
+      const newCpa = newLeads > 0 ? Math.round((newSpend / newLeads) * 100) / 100 : c.cpa;
+      const roasJitter = (Math.random() * 0.1 - 0.05);
+      const newRoas = Math.max(1.0, Math.round((Number(c.roas || 3.5) + roasJitter) * 100) / 100);
+
+      return {
+        ...c,
+        spend: newSpend,
+        leads: newLeads,
+        cpa: newCpa,
+        roas: newRoas,
+      };
+    });
+
+    setStorage(STORAGE_KEYS.CAMPAIGNS, updated);
+    return {
+      campaigns: updated,
+      addedSpend: Math.round(totalAddedSpend * 100) / 100,
+      addedLeads: totalAddedLeads,
+    };
+  },
+
   // --- STORYBOARD ---
   async getStoryboard() {
     await new Promise((r) => setTimeout(r, 100));
@@ -159,6 +243,27 @@ export const mockApi = {
     };
     setStorage(STORAGE_KEYS.STORYBOARD, generated);
     return generated;
+  },
+
+  async addCustomScene(scene) {
+    await new Promise((r) => setTimeout(r, 100));
+    const current = getStorage(STORAGE_KEYS.STORYBOARD, initialStoryboard);
+    const scenes = current.scenes || [];
+    const newNumber = scenes.length + 1;
+    const newScene = {
+      number: newNumber,
+      time: scene.time || `Сцена ${newNumber}`,
+      title: scene.title || `Додаткова сцена ${newNumber}`,
+      visual: scene.visual || 'Візуальна дія на екрані',
+      quote: scene.quote || 'Текст спікера або закадрова озвучка',
+      tag: scene.tag || 'Користувацька сцена',
+    };
+    const updated = {
+      ...current,
+      scenes: [...scenes, newScene],
+    };
+    setStorage(STORAGE_KEYS.STORYBOARD, updated);
+    return updated;
   },
 
   // --- FATIGUE DETECTOR ---

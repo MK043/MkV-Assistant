@@ -15,6 +15,9 @@ export function AppProvider({ children }) {
   const [dateRange, setDateRange] = useState('Останні 30 днів');
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [editingCampaign, setEditingCampaign] = useState(null);
+  const [liveAlert, setLiveAlert] = useState(null);
+  const [liveSyncActive, setLiveSyncActive] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -41,7 +44,58 @@ export function AppProvider({ children }) {
   const handleCreateCampaign = async (campaignData) => {
     const created = await mockApi.addCampaign(campaignData);
     setCampaigns((prev) => [created, ...prev]);
+    triggerAlert(`Кампанію «${created.name}» створено та активовано в аукціоні.`);
   };
+
+  const handleUpdateCampaign = async (id, fields) => {
+    const updated = await mockApi.updateCampaign(id, fields);
+    setCampaigns((prev) => prev.map((c) => (c.id === id ? updated : c)));
+    setEditingCampaign(null);
+    triggerAlert(`Кампанію «${updated.name}» успішно оновлено.`);
+  };
+
+  const handleDuplicateCampaign = async (id) => {
+    const duplicated = await mockApi.duplicateCampaign(id);
+    if (duplicated) {
+      setCampaigns((prev) => [duplicated, ...prev]);
+      triggerAlert(`Створено дублікат кампанії «${duplicated.name}».`);
+    }
+  };
+
+  const handleDeleteCampaign = async (id) => {
+    const target = campaigns.find((c) => c.id === id);
+    await mockApi.deleteCampaign(id);
+    setCampaigns((prev) => prev.filter((c) => c.id !== id));
+    triggerAlert(`Кампанію «${target?.name || id}» архівовано/видалено.`);
+  };
+
+  const handleSimulateLiveTick = async () => {
+    const result = await mockApi.simulateLiveTick();
+    setCampaigns(result.campaigns);
+    triggerAlert(`Live Sync: +${result.addedLeads} лідів, +$${result.addedSpend} витрат зафіксовано в реальному часі.`);
+  };
+
+  const handleAddCustomScene = async (scene) => {
+    const updated = await mockApi.addCustomScene(scene);
+    setStoryboard(updated);
+    triggerAlert(`Сцену №${updated.scenes.length} додано до розкадровки.`);
+  };
+
+  const triggerAlert = (message) => {
+    setLiveAlert(message);
+    setTimeout(() => {
+      setLiveAlert((curr) => (curr === message ? null : curr));
+    }, 4500);
+  };
+
+  // Background Live Sync Simulator
+  useEffect(() => {
+    if (!liveSyncActive) return;
+    const interval = setInterval(() => {
+      handleSimulateLiveTick();
+    }, 7000);
+    return () => clearInterval(interval);
+  }, [liveSyncActive]);
 
   const handleToggleCampaign = async (id) => {
     // optimistic update
@@ -94,8 +148,19 @@ export function AppProvider({ children }) {
         setIsAuthModalOpen,
         isCreateModalOpen,
         setIsCreateModalOpen,
+        editingCampaign,
+        setEditingCampaign,
+        liveAlert,
+        setLiveAlert,
+        liveSyncActive,
+        setLiveSyncActive,
         isLoading,
         handleCreateCampaign,
+        handleUpdateCampaign,
+        handleDuplicateCampaign,
+        handleDeleteCampaign,
+        handleSimulateLiveTick,
+        handleAddCustomScene,
         handleToggleCampaign,
         handleGenerateStoryboard,
         handleRotateHook,

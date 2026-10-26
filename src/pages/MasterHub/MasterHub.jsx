@@ -1,13 +1,21 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BarChart3, Clapperboard, Rocket, Flame, ArrowRight } from 'lucide-react';
+import { BarChart3, Clapperboard, Rocket, Flame, ArrowRight, Activity, RefreshCw } from 'lucide-react';
 import Navbar from '../../components/Navbar/Navbar';
 import { useApp } from '../../context/AppContext';
 import styles from './MasterHub.module.css';
 
 export default function MasterHub() {
   const navigate = useNavigate();
-  const { campaigns, setIsCreateModalOpen, user } = useApp();
+  const {
+    campaigns,
+    setIsCreateModalOpen,
+    user,
+    liveAlert,
+    handleSimulateLiveTick,
+    liveSyncActive,
+    setLiveSyncActive,
+  } = useApp();
 
   const activeCampaigns = campaigns.filter((c) => c.active);
   const totalSpend = campaigns.reduce((acc, c) => acc + (c.spend || 0), 14820);
@@ -24,15 +32,42 @@ export default function MasterHub() {
       />
 
       <div className={styles.container}>
+        {liveAlert && (
+          <div className={styles.alertBanner}>
+            <Activity size={16} />
+            <span>{liveAlert}</span>
+          </div>
+        )}
+
         {/* Top Welcome Banner */}
         <div className={styles.welcomeBanner}>
           <div className={styles.welcomeText}>
             <h2>Вітаємо у MkV Sales Manager CRM, {user.name.split(' ')[0]} 👋</h2>
             <p>Усі рекламні кабінети підключені та синхронізовані. Система готова до оптимізації кампаній.</p>
             <div className={styles.bannerStats}>
-              <span className={styles.bannerBadge}>● За останні 24г: $640 витрат</span>
-              <span className={styles.bannerBadge}>● 54 нові ліди</span>
+              <span className={styles.bannerBadge}>● Загальні витрати: ${totalSpend.toLocaleString()}</span>
+              <span className={styles.bannerBadge}>● {totalLeads.toLocaleString()} лідів</span>
               <span className={`${styles.bannerBadge} ${styles.bannerBadgeInfo}`}>● Середній ROAS {avgRoas}x</span>
+
+              <button
+                type="button"
+                className={`${styles.pulseBtn} ${liveSyncActive ? styles.pulseBtnActive : ''}`}
+                onClick={() => setLiveSyncActive(!liveSyncActive)}
+                title="Автоматичний пульс лідів кожні 7 секунд"
+              >
+                <Activity size={14} />
+                <span>{liveSyncActive ? '● Live Sync (Увімкнено)' : 'Live Sync (Пульс)'}</span>
+              </button>
+
+              <button
+                type="button"
+                className={styles.pulseBtn}
+                onClick={handleSimulateLiveTick}
+                title="Оновити метрики вручну"
+              >
+                <RefreshCw size={14} />
+                <span>Оновити дані</span>
+              </button>
             </div>
           </div>
         </div>
