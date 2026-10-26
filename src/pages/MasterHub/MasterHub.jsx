@@ -26,8 +26,7 @@ export default function MasterHub() {
     <div>
       <Navbar
         title="Головний огляд платформи"
-        actionLabel="+ Створити кампанію"
-        onActionClick={() => setIsCreateModalOpen(true)}
+        subtitle="Зведена статистика медіабаїнгу та статус систем CRM"
       />
 
       <div className={styles.container}>

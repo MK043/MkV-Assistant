@@ -68,7 +68,10 @@ export default function FatigueDetector() {
 
   return (
     <div>
-      <Navbar title="Детектор вигорання аудиторії та хуки" />
+      <Navbar
+        title="Детектор вигорання аудиторії та хуки"
+        subtitle="Моніторинг втоми креативів, частоти показу та ротація хуків"
+      />
 
       <div className={styles.container}>
         {notification && (

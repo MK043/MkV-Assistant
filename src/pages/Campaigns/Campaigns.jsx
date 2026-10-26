@@ -19,6 +19,8 @@ import {
   CheckSquare,
   SlidersHorizontal,
   Calculator,
+  Search,
+  Plus,
 } from 'lucide-react';
 import Navbar from '../../components/Navbar/Navbar';
 import RoasCalculator from '../../components/RoasCalculator/RoasCalculator';
@@ -38,6 +40,8 @@ export default function Campaigns() {
     liveSyncActive,
     setLiveSyncActive,
     searchQuery,
+    setSearchQuery,
+    setIsCreateModalOpen,
   } = useApp();
 
   // Status & Platform Filtering
@@ -239,7 +243,10 @@ export default function Campaigns() {
 
   return (
     <div>
-      <Navbar title="Управління рекламними кампаніями" />
+      <Navbar
+        title="Управління рекламними кампаніями"
+        subtitle="Медіабаїнг, оптимізація аукціонів та автоправила"
+      />
 
       <div className={styles.container}>
         {liveAlert && (
@@ -249,9 +256,31 @@ export default function Campaigns() {
           </div>
         )}
 
-        {/* Clean & Structured Toolbar (Organized Tabs & Platform Selector) */}
+        {/* Clean & Structured Toolbar (Organized Search, Tabs & Platform Selector) */}
         <div className={styles.topBar}>
           <div className={styles.filtersGroup}>
+            {/* Real In-Page Search Box */}
+            <div className={styles.searchBox}>
+              <Search size={14} className={styles.searchIcon} />
+              <input
+                type="text"
+                className={styles.searchInput}
+                placeholder="Пошук кампанії за назвою..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  className={styles.clearSearchBtn}
+                  onClick={() => setSearchQuery('')}
+                  title="Очистити пошук"
+                >
+                  <X size={12} />
+                </button>
+              )}
+            </div>
+
             {/* Status Segmented Tabs */}
             <div className={styles.segmentedControl}>
               <button
@@ -306,6 +335,16 @@ export default function Campaigns() {
           <div className={styles.actionsWrapper}>
             <button
               type="button"
+              className={styles.primaryCreateBtn}
+              onClick={() => setIsCreateModalOpen(true)}
+              title="Створити нову рекламну кампанію"
+            >
+              <Plus size={15} />
+              <span>Створити кампанію</span>
+            </button>
+
+            <button
+              type="button"
               className={`${styles.secondaryBtn} ${liveSyncActive ? styles.liveBtnActive : ''}`}
               onClick={() => setLiveSyncActive(!liveSyncActive)}
               title="Автоматичний пульс лідів кожні 7 секунд"
@@ -326,22 +365,22 @@ export default function Campaigns() {
 
             <button
               type="button"
-              className={styles.secondaryBtn}
-              onClick={() => handleExportCsv(campaigns)}
-              title="Завантажити повний звіт кампаній у CSV"
-            >
-              <Download size={14} />
-              <span>Експорт CSV</span>
-            </button>
-
-            <button
-              type="button"
               className={`${styles.secondaryBtn} ${showCalculator ? styles.calcBtnActive : ''}`}
               onClick={() => setShowCalculator(!showCalculator)}
               title="Розрахувати рекомендований добовий бюджет для Meta та TikTok"
             >
               <Calculator size={14} />
               <span>{showCalculator ? 'Сховати калькулятор' : 'Калькулятор бюджету'}</span>
+            </button>
+
+            <button
+              type="button"
+              className={styles.secondaryBtn}
+              onClick={() => handleExportCsv(campaigns)}
+              title="Завантажити повний звіт кампаній у CSV"
+            >
+              <Download size={14} />
+              <span>Експорт CSV</span>
             </button>
           </div>
         </div>

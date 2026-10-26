@@ -5,6 +5,35 @@
   padding: 32px;
 }
 
+.dateSelectorBox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #0F172A;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 6px 12px;
+}
+
+.dateIcon {
+  color: var(--accent-primary-light);
+}
+
+.dateSelect {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+}
+
+.dateSelect option {
+  background-color: #0F172A;
+  color: var(--text-primary);
+}
+
 .metricsGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

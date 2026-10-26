@@ -211,7 +211,10 @@ export default function CreativeStudio() {
 
   return (
     <div>
-      <Navbar title="Креативна ШІ-студія сценаріїв" />
+      <Navbar
+        title="Креативна ШІ-студія сценаріїв"
+        subtitle="Генерація розкадровок, хуків та аудіодизайну під Meta і TikTok"
+      />
 
       <div className={styles.container}>
         {/* Left Column: Form & Detailed Settings */}

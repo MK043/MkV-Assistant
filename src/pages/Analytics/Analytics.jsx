@@ -1,4 +1,5 @@
 import React from 'react';
+import { Calendar } from 'lucide-react';
 import Navbar from '../../components/Navbar/Navbar';
 import MetricCard from '../../components/MetricCard/MetricCard';
 import RoasCalculator from '../../components/RoasCalculator/RoasCalculator';
@@ -6,7 +7,7 @@ import { useApp } from '../../context/AppContext';
 import styles from './Analytics.module.css';
 
 export default function Analytics() {
-  const { campaigns, searchQuery, activePlatformFilter, dateRange } = useApp();
+  const { campaigns, searchQuery, activePlatformFilter, dateRange, setDateRange } = useApp();
 
   const filteredCampaigns = campaigns.filter((c) => {
     const matchesSearch = c.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -36,7 +37,26 @@ export default function Analytics() {
 
   return (
     <div>
-      <Navbar title="Головна панель аналітики" />
+      <Navbar
+        title="Головна панель аналітики"
+        subtitle="Наскрізні метрики медіабаїнгу та окупність інвестицій"
+        actions={
+          <div className={styles.dateSelectorBox}>
+            <Calendar size={14} className={styles.dateIcon} />
+            <select
+              className={styles.dateSelect}
+              value={dateRange}
+              onChange={(e) => setDateRange(e.target.value)}
+              title="Фільтр періоду звітності"
+            >
+              <option>Сьогодні</option>
+              <option>Останні 7 днів</option>
+              <option>Останні 30 днів</option>
+              <option>Останні 90 днів</option>
+            </select>
+          </div>
+        }
+      />
 
       <div className={styles.container}>
         {/* Top 4 KPI Metrics */}
