@@ -58,51 +58,6 @@ export default function CreativeStudio() {
     return () => clearInterval(interval);
   }, [isPlaying, totalMaxSeconds]);
 
-  const presets = [
-    {
-      label: '🚗 Nissan Leaf з США',
-      prompt: 'Продаж авто після замовлення з США, Нісан Ліф 2020 року з пошкодженням спереду мінімальний, максимальна комплектація сл плюс 62 квт, 100 тисяч км пробігу, треба гарний відос на рекламу',
-      duration: '30с (Оптимально)',
-      scenes: '4',
-      hook: 'Ціна / Вигода',
-      style: 'UGC на iPhone (POV)',
-    },
-    {
-      label: '💄 Сироватка для обличчя',
-      prompt: 'Натуральна сироватка для обличчя з рослинними пептидами проти зморшок та лущення, знижка 25% на перше замовлення',
-      duration: '30с (Оптимально)',
-      scenes: '3',
-      hook: 'Проблема → Рішення',
-      style: 'UGC на iPhone (POV)',
-    },
-    {
-      label: '📱 iPhone 15 Pro Max',
-      prompt: 'Оригінальний iPhone 15 Pro Max 256GB з США, стан 10/10, батарея 100%, офіційна гарантія 12 міс, на 30% дешевше ніж у мережах',
-      duration: '30с (Оптимально)',
-      scenes: '4',
-      hook: 'Ціна / Вигода',
-      style: 'Speed-Ramp (Зуми)',
-    },
-    {
-      label: '🏢 Квартира в новобудові',
-      prompt: 'Двокімнатна квартира 68 кв.м з дизайнерським ремонтом та панорамними вікнами в ЖК бізнес-класу, розтермінування від забудовника',
-      duration: '45с (Детальний тест)',
-      scenes: '4',
-      hook: 'Інтрига / Запитання',
-      style: 'B-Roll (Slow-mo)',
-    },
-  ];
-
-  const applyPreset = (p) => {
-    setProductName(p.prompt);
-    setDuration(p.duration);
-    setScenesCount(p.scenes);
-    setHookType(p.hook);
-    setFilmingStyle(p.style);
-    setFeedback(`Пресет «${p.label}» завантажено. Натисніть «Згенерувати», щоб побачити адаптований сценарій.`);
-    setTimeout(() => setFeedback(''), 4500);
-  };
-
   const handleGenerate = async (e) => {
     e.preventDefault();
     if (!productName.trim()) return;
@@ -227,23 +182,6 @@ export default function CreativeStudio() {
             <p className={styles.panelSub}>
               Розумний аналіз ніші, розкадровка, ракурси камери та звуковий дизайн
             </p>
-
-            {/* Quick Demo Presets */}
-            <div style={{ marginBottom: '10px' }}>
-              <span className={styles.label} style={{ fontSize: '10.5px' }}>ШВИДКІ ПРЕСЕТИ ДЛЯ ТЕСТУ:</span>
-              <div className={styles.presetsRow}>
-                {presets.map((p) => (
-                  <button
-                    key={p.label}
-                    type="button"
-                    className={styles.presetPill}
-                    onClick={() => applyPreset(p)}
-                  >
-                    {p.label}
-                  </button>
-                ))}
-              </div>
-            </div>
 
             <form onSubmit={handleGenerate}>
               <div className={styles.formGroup}>
