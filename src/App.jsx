@@ -1,0 +1,56 @@
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useApp } from './context/AppContext';
+import Sidebar from './components/Sidebar/Sidebar';
+import AuthModal from './components/AuthModal/AuthModal';
+import CreateCampaignModal from './components/CreateCampaignModal/CreateCampaignModal';
+import EditCampaignModal from './components/EditCampaignModal/EditCampaignModal';
+import MasterHub from './pages/MasterHub/MasterHub';
+import Analytics from './pages/Analytics/Analytics';
+import CreativeStudio from './pages/CreativeStudio/CreativeStudio';
+import Campaigns from './pages/Campaigns/Campaigns';
+import FatigueDetector from './pages/FatigueDetector/FatigueDetector';
+import NotFound from './pages/NotFound/NotFound';
+import styles from './App.module.css';
+
+export default function App() {
+  const {
+    isCreateModalOpen,
+    setIsCreateModalOpen,
+    handleCreateCampaign,
+    editingCampaign,
+    setEditingCampaign,
+    handleUpdateCampaign,
+  } = useApp();
+
+  return (
+    <div className={styles.appLayout}>
+      <Sidebar />
+
+      <main className={styles.mainContent}>
+        <Routes>
+          <Route path="/" element={<Navigate to="/hub" replace />} />
+          <Route path="/hub" element={<MasterHub />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/creative" element={<CreativeStudio />} />
+          <Route path="/campaigns" element={<Campaigns />} />
+          <Route path="/fatigue" element={<FatigueDetector />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+
+      <AuthModal />
+      <CreateCampaignModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onCreate={handleCreateCampaign}
+      />
+      <EditCampaignModal
+        campaign={editingCampaign}
+        isOpen={Boolean(editingCampaign)}
+        onClose={() => setEditingCampaign(null)}
+        onSave={handleUpdateCampaign}
+      />
+    </div>
+  );
+}
