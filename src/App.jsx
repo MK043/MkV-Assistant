@@ -7,6 +7,7 @@ import Analytics from './pages/Analytics/Analytics';
 import CreativeStudio from './pages/CreativeStudio/CreativeStudio';
 import Campaigns from './pages/Campaigns/Campaigns';
 import FatigueDetector from './pages/FatigueDetector/FatigueDetector';
+import NotFound from './pages/NotFound/NotFound';
 import styles from './App.module.css';
 
 export default function App() {
@@ -24,7 +25,7 @@ export default function App() {
           <Route path="/creative" element={<CreativeStudio />} />
           <Route path="/campaigns" element={<Campaigns />} />
           <Route path="/fatigue" element={<FatigueDetector />} />
-          <Route path="*" element={<Navigate to="/hub" replace />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
 
