@@ -54,12 +54,63 @@ const initialStoryboard = {
 
 const initialFatigue = {
   score: 24,
-  statusLabel: 'Норма',
-  frequency: '1.8x',
+  statusLabel: 'Потребує оптимізації',
+  frequency: '2.1x',
+  wasteDrainWeekly: 340,
+  avgHoldRate: '34.2%',
   creatives: [
-    { id: 1, name: 'EcoCream_Hook_Curiosity', platform: 'Meta Reels', holdRate: '48.2%', freq: '1.6x', status: 'effective', action: 'Масштабувати' },
-    { id: 2, name: 'TikTok_Spark_Review', platform: 'TikTok Ads', holdRate: '39.5%', freq: '2.1x', status: 'stable', action: 'Спостереження' },
-    { id: 3, name: 'SummerSale_OldHook', platform: 'TikTok / Reels', holdRate: '14.8%', freq: '3.4x', status: 'fatigued', action: 'Замінити хук ⚡' },
+    {
+      id: 1,
+      name: 'EcoCream_Hook_Curiosity',
+      platform: 'Meta Reels',
+      holdRate: '48.2%',
+      holdRateNum: 48.2,
+      freq: '1.6x',
+      cpa: '$6.80',
+      cpaTrend: '-14% (Стабільно)',
+      wasteDrain: 0,
+      status: 'effective',
+      action: 'Масштабувати',
+    },
+    {
+      id: 2,
+      name: 'TikTok_Spark_Review',
+      platform: 'TikTok Ads',
+      holdRate: '39.5%',
+      holdRateNum: 39.5,
+      freq: '2.1x',
+      cpa: '$9.40',
+      cpaTrend: '+5% (Норма)',
+      wasteDrain: 35,
+      status: 'stable',
+      action: 'Спостереження',
+    },
+    {
+      id: 3,
+      name: 'SummerSale_OldHook',
+      platform: 'TikTok / Reels',
+      holdRate: '14.8%',
+      holdRateNum: 14.8,
+      freq: '3.6x',
+      cpa: '$18.90',
+      cpaTrend: '+46% ⚠️ (Ріст CPA)',
+      wasteDrain: 280,
+      status: 'fatigued',
+      action: 'Замінити хук ⚡',
+    },
+    {
+      id: 4,
+      name: 'AntiAging_Serum_DirectOffer',
+      platform: 'Meta Feed',
+      holdRate: '28.4%',
+      holdRateNum: 28.4,
+      freq: '2.6x',
+      cpa: '$12.40',
+      cpaTrend: '+16% (Початок спаду)',
+      wasteDrain: 25,
+      status: 'stable',
+      action: 'Ротувати хук',
+    },
   ],
 };
 
@@ -239,26 +290,60 @@ export const mockApi = {
     return getStorage(STORAGE_KEYS.FATIGUE, initialFatigue);
   },
 
-  async rotateHook(selectedVariant) {
+  async rotateHook(selectedVariant, creativeId = 3) {
     await new Promise((r) => setTimeout(r, 300));
     const current = getStorage(STORAGE_KEYS.FATIGUE, initialFatigue);
     const updatedCreatives = current.creatives.map((c) => {
-      if (c.id === 3) {
+      if (c.id === creativeId || (creativeId === 3 && c.id === 3)) {
         return {
           ...c,
-          name: `SummerSale_Rotated_${selectedVariant}`,
-          holdRate: '38.4% (Відновлено ✓)',
-          status: 'stable',
-          action: 'Оновлено ✓',
+          name: `${c.name.replace(/_OldHook|_Rotated_.*$/, '')}_Rotated_AI`,
+          holdRate: '42.4% (Відновлено ✓)',
+          holdRateNum: 42.4,
+          freq: '1.7x',
+          cpa: '$8.20',
+          cpaTrend: '-24% (Оптимально)',
+          wasteDrain: 0,
+          status: 'effective',
+          action: 'Оновлено ШІ ✓',
         };
       }
       return c;
     });
+    const fatiguedRemain = updatedCreatives.filter((c) => c.status === 'fatigued').length;
+    const totalDrain = updatedCreatives.reduce((acc, c) => acc + (c.wasteDrain || 0), 0);
     const updated = {
       ...current,
-      score: 18,
-      statusLabel: 'Оптимально',
+      score: fatiguedRemain > 0 ? 20 : 12,
+      statusLabel: fatiguedRemain > 0 ? 'Увага' : 'Оптимально',
+      wasteDrainWeekly: totalDrain,
       creatives: updatedCreatives,
+    };
+    setStorage(STORAGE_KEYS.FATIGUE, updated);
+    return updated;
+  },
+
+  async addCreativeToFatigue(creative) {
+    await new Promise((r) => setTimeout(r, 200));
+    const current = getStorage(STORAGE_KEYS.FATIGUE, initialFatigue);
+    const holdVal = Number(creative.holdRate) || 35.0;
+    const isFatigued = holdVal < 25;
+    const newEntry = {
+      id: Date.now(),
+      name: creative.name || 'New_Creative_Monitor',
+      platform: creative.platform || 'Meta Reels',
+      holdRate: `${holdVal.toFixed(1)}%`,
+      holdRateNum: holdVal,
+      freq: `${creative.freq || 1.6}x`,
+      cpa: `$${creative.cpa || '9.50'}`,
+      cpaTrend: 'Новий моніторинг',
+      wasteDrain: isFatigued ? 120 : 0,
+      status: isFatigued ? 'fatigued' : 'effective',
+      action: isFatigued ? 'Замінити хук ⚡' : 'Масштабувати',
+    };
+    const updated = {
+      ...current,
+      creatives: [newEntry, ...current.creatives],
     };
     setStorage(STORAGE_KEYS.FATIGUE, updated);
     return updated;

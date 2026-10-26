@@ -111,9 +111,16 @@ export function AppProvider({ children }) {
     return generated;
   };
 
-  const handleRotateHook = async (selectedVariant) => {
-    const updated = await mockApi.rotateHook(selectedVariant);
+  const handleRotateHook = async (selectedVariant, creativeId = 3) => {
+    const updated = await mockApi.rotateHook(selectedVariant, creativeId);
     setFatigue(updated);
+    return updated;
+  };
+
+  const handleAddCreativeToFatigue = async (creativeData) => {
+    const updated = await mockApi.addCreativeToFatigue(creativeData);
+    setFatigue(updated);
+    return updated;
   };
 
   const handleLogin = async (email) => {
@@ -164,6 +171,7 @@ export function AppProvider({ children }) {
         handleToggleCampaign,
         handleGenerateStoryboard,
         handleRotateHook,
+        handleAddCreativeToFatigue,
         handleLogin,
         handleLogout,
       }}
