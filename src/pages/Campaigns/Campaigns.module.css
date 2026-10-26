@@ -32,13 +32,13 @@
   color: var(--text-secondary);
   font-size: 13px;
   width: 220px;
-  transition: all var(--transition-fast);
+  min-width: 220px;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .searchBox:focus-within {
   border-color: var(--accent-primary);
   box-shadow: 0 0 10px rgba(99, 102, 241, 0.25);
-  width: 250px;
 }
 
 .searchIcon {
@@ -323,6 +323,7 @@
 .table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 .table th {
@@ -334,6 +335,9 @@
   padding: 12px 14px;
   border-bottom: 1px solid var(--border-subtle);
   text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .thSortable {
@@ -350,6 +354,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  max-width: 100%;
 }
 
 .sortIconMuted {
@@ -374,6 +379,9 @@
   color: var(--text-secondary);
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .rowSelected {

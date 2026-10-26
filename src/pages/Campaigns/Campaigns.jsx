@@ -18,12 +18,10 @@ import {
   X,
   CheckSquare,
   SlidersHorizontal,
-  Calculator,
   Search,
   Plus,
 } from 'lucide-react';
 import Navbar from '../../components/Navbar/Navbar';
-import RoasCalculator from '../../components/RoasCalculator/RoasCalculator';
 import { useApp } from '../../context/AppContext';
 import styles from './Campaigns.module.css';
 
@@ -57,9 +55,6 @@ export default function Campaigns() {
 
   // Expandable Auction Details Drawer
   const [expandedRowId, setExpandedRowId] = useState(null);
-
-  // Toggle unit economics & daily budget calculator
-  const [showCalculator, setShowCalculator] = useState(false);
 
   // Auto-rules switches
   const [cpaGuardActive, setCpaGuardActive] = useState(true);
@@ -365,16 +360,6 @@ export default function Campaigns() {
 
             <button
               type="button"
-              className={`${styles.secondaryBtn} ${showCalculator ? styles.calcBtnActive : ''}`}
-              onClick={() => setShowCalculator(!showCalculator)}
-              title="Розрахувати рекомендований добовий бюджет для Meta та TikTok"
-            >
-              <Calculator size={14} />
-              <span>{showCalculator ? 'Сховати калькулятор' : 'Калькулятор бюджету'}</span>
-            </button>
-
-            <button
-              type="button"
               className={styles.secondaryBtn}
               onClick={() => handleExportCsv(campaigns)}
               title="Завантажити повний звіт кампаній у CSV"
@@ -385,12 +370,7 @@ export default function Campaigns() {
           </div>
         </div>
 
-        {/* Optional Collapsible Unit Economics & Budget Calculator */}
-        {showCalculator && (
-          <div style={{ marginTop: '-8px' }}>
-            <RoasCalculator />
-          </div>
-        )}
+        {/* Floating Bulk Action Bar when campaigns are selected */}
 
         {/* Floating Bulk Action Bar when campaigns are selected */}
         {selectedIds.length > 0 && (
@@ -474,7 +454,7 @@ export default function Campaigns() {
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th style={{ width: '38px', textAlign: 'center' }}>
+                  <th style={{ width: '42px', textAlign: 'center' }}>
                     <input
                       type="checkbox"
                       className={styles.customCheckbox}
@@ -483,44 +463,44 @@ export default function Campaigns() {
                       title="Вибрати всі відфільтровані кампанії"
                     />
                   </th>
-                  <th className={styles.thSortable} onClick={() => handleSort('name')}>
+                  <th className={styles.thSortable} style={{ width: '25%' }} onClick={() => handleSort('name')}>
                     <div className={styles.thContent}>
                       <span>НАЗВА КАМПАНІЇ</span>
                       {renderSortIndicator('name')}
                     </div>
                   </th>
-                  <th className={styles.thSortable} onClick={() => handleSort('platform')}>
+                  <th className={styles.thSortable} style={{ width: '13%' }} onClick={() => handleSort('platform')}>
                     <div className={styles.thContent}>
                       <span>ПЛАТФОРМА</span>
                       {renderSortIndicator('platform')}
                     </div>
                   </th>
-                  <th className={styles.thSortable} onClick={() => handleSort('budget')}>
+                  <th className={styles.thSortable} style={{ width: '16%' }} onClick={() => handleSort('budget')}>
                     <div className={styles.thContent}>
                       <span>ДОБОВИЙ БЮДЖЕТ</span>
                       {renderSortIndicator('budget')}
                     </div>
                   </th>
-                  <th className={styles.thSortable} onClick={() => handleSort('spend')}>
+                  <th className={styles.thSortable} style={{ width: '12%' }} onClick={() => handleSort('spend')}>
                     <div className={styles.thContent}>
                       <span>ВИТРАТИ</span>
                       {renderSortIndicator('spend')}
                     </div>
                   </th>
-                  <th className={styles.thSortable} onClick={() => handleSort('cpa')}>
+                  <th className={styles.thSortable} style={{ width: '10%' }} onClick={() => handleSort('cpa')}>
                     <div className={styles.thContent}>
                       <span>CPA (ЛІД)</span>
                       {renderSortIndicator('cpa')}
                     </div>
                   </th>
-                  <th className={styles.thSortable} onClick={() => handleSort('roas')}>
+                  <th className={styles.thSortable} style={{ width: '8%' }} onClick={() => handleSort('roas')}>
                     <div className={styles.thContent}>
                       <span>ROAS</span>
                       {renderSortIndicator('roas')}
                     </div>
                   </th>
-                  <th style={{ textAlign: 'center' }}>СТАТУС</th>
-                  <th style={{ textAlign: 'right' }}>ДІЇ ТАРГЕТОЛОГА</th>
+                  <th style={{ width: '65px', textAlign: 'center' }}>СТАТУС</th>
+                  <th style={{ width: '125px', textAlign: 'right' }}>ДІЇ ТАРГЕТОЛОГА</th>
                 </tr>
               </thead>
               <tbody>
