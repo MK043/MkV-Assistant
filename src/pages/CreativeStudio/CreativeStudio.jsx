@@ -11,9 +11,13 @@ import {
   Film,
   Sparkles,
   Volume2,
+  Users,
+  Target,
+  AlertCircle,
 } from 'lucide-react';
 import Navbar from '../../components/Navbar/Navbar';
 import { useApp } from '../../context/AppContext';
+import { analyzeTargetAudience } from '../../services/aiScriptEngine';
 import styles from './CreativeStudio.module.css';
 
 export default function CreativeStudio() {
@@ -35,6 +39,9 @@ export default function CreativeStudio() {
   const [tone, setTone] = useState('Динамічна / Провокативна');
   const [format, setFormat] = useState('9:16 (Reels / TikTok)');
   const [selectedVoice, setSelectedVoice] = useState('Оксана (AI Natural)');
+
+  // AI Target Audience Analysis State
+  const [audienceAnalysis, setAudienceAnalysis] = useState(() => analyzeTargetAudience(productName));
 
   // Custom Scene state
   const [showAddScene, setShowAddScene] = useState(false);
@@ -86,9 +93,11 @@ export default function CreativeStudio() {
         tone,
         format,
       });
+      // Synchronize Target Audience analysis with the new prompt
+      setAudienceAnalysis(analyzeTargetAudience(productName.trim()));
       setIsPlaying(false);
       setCurrentTime(0);
-      setFeedback('Розкадровку успішно адаптовано під ваш запит.');
+      setFeedback('Розкадровку та аналіз ЦА успішно адаптовано під ваш запит.');
       setTimeout(() => setFeedback(''), 4500);
     } finally {
       setIsGenerating(false);
@@ -301,6 +310,44 @@ export default function CreativeStudio() {
                 )}
               </button>
             </form>
+          </div>
+
+          {/* AI Target Audience & Buyer Persona Panel */}
+          <div className={styles.panelCard}>
+            <div className={styles.audienceHeader}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Users size={17} style={{ color: 'var(--accent-primary-light)' }} />
+                <h3 className={styles.panelTitle} style={{ fontSize: '15px', margin: 0 }}>
+                  Аналіз цільової аудиторії (ЦА)
+                </h3>
+              </div>
+              <span className={styles.nicheBadge}>{audienceAnalysis.nicheTitle}</span>
+            </div>
+
+            <div className={styles.audienceSection}>
+              <div className={styles.audienceSubTitle}>
+                <Target size={13} style={{ color: '#38BDF8' }} />
+                <span>Ядро аудиторії (Buyer Persona):</span>
+              </div>
+              <p className={styles.audienceDesc}>
+                <strong>Демографія:</strong> {audienceAnalysis.persona.demographics}
+              </p>
+              <p className={styles.audienceDesc}>
+                <strong>Психографічний інсайт:</strong> {audienceAnalysis.persona.psychographics}
+              </p>
+            </div>
+
+            <div className={styles.audienceSection} style={{ borderBottom: 'none', marginBottom: 0, paddingBottom: 0 }}>
+              <div className={styles.audienceSubTitle}>
+                <AlertCircle size={13} style={{ color: '#F59E0B' }} />
+                <span>Головні болі та тривоги ЦА (Pains):</span>
+              </div>
+              <ul className={styles.audienceList}>
+                {audienceAnalysis.pains.map((pain, idx) => (
+                  <li key={idx}>{pain}</li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
 
