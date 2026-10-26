@@ -11,7 +11,7 @@
 }
 
 .leftCol {
-  width: 440px;
+  width: 470px;
   min-width: 440px;
   display: flex;
   flex-direction: column;
@@ -28,7 +28,7 @@
 .formRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 10px;
 }
 
 .textarea {
@@ -37,9 +37,9 @@
   border-radius: var(--radius-md);
   padding: 10px 14px;
   color: var(--text-primary);
-  font-size: 13.5px;
+  font-size: 13px;
   width: 100%;
-  min-height: 85px;
+  min-height: 80px;
   resize: vertical;
   line-height: 1.45;
   transition: all var(--transition-fast);
@@ -49,6 +49,33 @@
   outline: none;
   border-color: var(--accent-primary);
   box-shadow: 0 0 12px rgba(99, 102, 241, 0.25);
+}
+
+.presetsRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+  margin-bottom: 8px;
+}
+
+.presetPill {
+  background: #0C1424;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 3px 9px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.presetPill:hover {
+  background: #172444;
+  color: #FFFFFF;
+  border-color: var(--accent-primary);
 }
 
 .metaPillsRow {
@@ -141,11 +168,62 @@
   background-color: #070B14;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: 10px 14px;
+  padding: 8px 10px;
   color: var(--text-primary);
-  font-size: 13.5px;
+  font-size: 12.5px;
   width: 100%;
   transition: all var(--transition-fast);
+}
+
+.copySceneBtn {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.copySceneBtn:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+  background: rgba(99, 102, 241, 0.12);
+}
+
+.voiceSwitcher {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.voiceBtn {
+  background: #10192D;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 2px 7px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.voiceBtn:hover {
+  color: #FFFFFF;
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+.voiceBtnActive {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary-light);
 }
 
 .input:focus, .select:focus {

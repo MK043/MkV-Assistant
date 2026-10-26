@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Zap, Play, Pause, Loader2, Copy, Download, Plus, CheckCircle2, Film, Sparkles } from 'lucide-react';
+import { Zap, Play, Pause, Loader2, Copy, Download, Plus, CheckCircle2, Film, Sparkles, Volume2 } from 'lucide-react';
 import Navbar from '../../components/Navbar/Navbar';
 import { useApp } from '../../context/AppContext';
 import styles from './CreativeStudio.module.css';
@@ -15,13 +15,14 @@ export default function CreativeStudio() {
   const [productName, setProductName] = useState(
     'Продаж авто після замовлення з США, Нісан Ліф 2020 року з пошкодженням спереду мінімальний, максимальна комплектація сл плюс 62 квт, 100 тисяч км пробігу, треба гарний відос на рекламу'
   );
-  const [duration, setDuration] = useState('30 секунд');
+  const [duration, setDuration] = useState('30с (Оптимально)');
   const [scenesCount, setScenesCount] = useState('4');
-  const [filmingStyle, setFilmingStyle] = useState('UGC на iPhone (Живий селфі-тест + POV)');
-  const [campaignGoal, setCampaignGoal] = useState('Холодний трафік (Зачеплення з першої секунди)');
-  const [hookType, setHookType] = useState('Ціна / Вигода (Shock Price / Реальна вартість під ключ)');
-  const [tone, setTone] = useState('Динамічна та провокативна');
-  const [format, setFormat] = useState('TikTok / Reels (9:16 Вертикальне)');
+  const [filmingStyle, setFilmingStyle] = useState('UGC на iPhone (POV)');
+  const [campaignGoal, setCampaignGoal] = useState('Холодний трафік');
+  const [hookType, setHookType] = useState('Ціна / Вигода');
+  const [tone, setTone] = useState('Динамічна / Провокативна');
+  const [format, setFormat] = useState('9:16 (Reels / TikTok)');
+  const [selectedVoice, setSelectedVoice] = useState('Оксана (AI Natural)');
 
   // Custom Scene state
   const [showAddScene, setShowAddScene] = useState(false);
@@ -30,7 +31,7 @@ export default function CreativeStudio() {
   const [feedback, setFeedback] = useState('');
 
   const currentBoard = storyboard || {
-    title: 'Nissan Leaf 2020 SL Plus (62 кВт) • Авто з США',
+    title: 'Nissan Leaf 2020 SL Plus (на 62 кВт) • Авто з США',
     duration: '30 секунд',
     niche: 'Автобізнес та електромобілі',
     scenes: [],
@@ -56,6 +57,51 @@ export default function CreativeStudio() {
     }
     return () => clearInterval(interval);
   }, [isPlaying, totalMaxSeconds]);
+
+  const presets = [
+    {
+      label: '🚗 Nissan Leaf з США',
+      prompt: 'Продаж авто після замовлення з США, Нісан Ліф 2020 року з пошкодженням спереду мінімальний, максимальна комплектація сл плюс 62 квт, 100 тисяч км пробігу, треба гарний відос на рекламу',
+      duration: '30с (Оптимально)',
+      scenes: '4',
+      hook: 'Ціна / Вигода',
+      style: 'UGC на iPhone (POV)',
+    },
+    {
+      label: '💄 Сироватка для обличчя',
+      prompt: 'Натуральна сироватка для обличчя з рослинними пептидами проти зморшок та лущення, знижка 25% на перше замовлення',
+      duration: '30с (Оптимально)',
+      scenes: '3',
+      hook: 'Проблема → Рішення',
+      style: 'UGC на iPhone (POV)',
+    },
+    {
+      label: '📱 iPhone 15 Pro Max',
+      prompt: 'Оригінальний iPhone 15 Pro Max 256GB з США, стан 10/10, батарея 100%, офіційна гарантія 12 міс, на 30% дешевше ніж у мережах',
+      duration: '30с (Оптимально)',
+      scenes: '4',
+      hook: 'Ціна / Вигода',
+      style: 'Speed-Ramp (Зуми)',
+    },
+    {
+      label: '🏢 Квартира в новобудові',
+      prompt: 'Двокімнатна квартира 68 кв.м з дизайнерським ремонтом та панорамними вікнами в ЖК бізнес-класу, розтермінування від забудовника',
+      duration: '45с (Детальний тест)',
+      scenes: '4',
+      hook: 'Інтрига / Запитання',
+      style: 'B-Roll (Slow-mo)',
+    },
+  ];
+
+  const applyPreset = (p) => {
+    setProductName(p.prompt);
+    setDuration(p.duration);
+    setScenesCount(p.scenes);
+    setHookType(p.hook);
+    setFilmingStyle(p.style);
+    setFeedback(`Пресет «${p.label}» завантажено. Натисніть «Згенерувати», щоб побачити адаптований сценарій.`);
+    setTimeout(() => setFeedback(''), 4500);
+  };
 
   const handleGenerate = async (e) => {
     e.preventDefault();
@@ -96,6 +142,13 @@ export default function CreativeStudio() {
     navigator.clipboard.writeText(lines.join('\n'));
     setFeedback('Сценарій та таймлайни успішно скопійовано для монтажера!');
     setTimeout(() => setFeedback(''), 4000);
+  };
+
+  const handleCopySingleScene = (scene) => {
+    const text = `[СЦЕНА ${scene.number} (${scene.time}) — ${scene.title}]\nКАМЕРА: ${scene.shotType || ''}\nВІЗУАЛ: ${scene.visual}\nОЗВУЧКА: ${scene.quote}\n${scene.audioFx ? `ЗВУК: ${scene.audioFx}\n` : ''}ФОКУС: ${scene.tag}`;
+    navigator.clipboard.writeText(text);
+    setFeedback(`Сцену ${scene.number} скопійовано у буфер!`);
+    setTimeout(() => setFeedback(''), 3000);
   };
 
   const handleDownloadBrief = () => {
@@ -169,8 +222,25 @@ export default function CreativeStudio() {
               <h2 className={styles.panelTitle} style={{ margin: 0 }}>Адаптивний ШІ-Генератор</h2>
             </div>
             <p className={styles.panelSub}>
-              Розумний парсинг ніші, розкадровка, ракурси камери та звуковий дизайн
+              Розумний аналіз ніші, розкадровка, ракурси камери та звуковий дизайн
             </p>
+
+            {/* Quick Demo Presets */}
+            <div style={{ marginBottom: '10px' }}>
+              <span className={styles.label} style={{ fontSize: '10.5px' }}>ШВИДКІ ПРЕСЕТИ ДЛЯ ТЕСТУ:</span>
+              <div className={styles.presetsRow}>
+                {presets.map((p) => (
+                  <button
+                    key={p.label}
+                    type="button"
+                    className={styles.presetPill}
+                    onClick={() => applyPreset(p)}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+            </div>
 
             <form onSubmit={handleGenerate}>
               <div className={styles.formGroup}>
@@ -187,77 +257,79 @@ export default function CreativeStudio() {
 
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
-                  <label className={styles.label}>ТРИВАЛІСТЬ РОЛИКА</label>
+                  <label className={styles.label}>ХРОНОМЕТРАЖ</label>
                   <select className={styles.select} value={duration} onChange={(e) => setDuration(e.target.value)}>
-                    <option>15 секунд (Динамічний бліц-хук)</option>
-                    <option>30 секунд (Оптимальний TikTok / Reels)</option>
-                    <option>45 секунд (Детальний тест / Огляд)</option>
-                    <option>60 секунд (Повний розбір / Закриття заперечень)</option>
+                    <option>15с (Бліц-хук)</option>
+                    <option>30с (Оптимально)</option>
+                    <option>45с (Детальний тест)</option>
+                    <option>60с (Повний огляд)</option>
                   </select>
                 </div>
 
                 <div className={styles.formGroup}>
                   <label className={styles.label}>КІЛЬКІСТЬ СЦЕН</label>
                   <select className={styles.select} value={scenesCount} onChange={(e) => setScenesCount(e.target.value)}>
-                    <option value="3">3 сцени (Хук → Суть → Заклик)</option>
-                    <option value="4">4 сцени (Хук → Огляд → Доказ → Офер)</option>
-                    <option value="5">5 сцен (Хук → Стан → Тест → Заперечення → CTA)</option>
+                    <option value="3">3 сцени (Хук → Офер)</option>
+                    <option value="4">4 сцени (Стандарт)</option>
+                    <option value="5">5 сцен (Детально)</option>
                   </select>
                 </div>
-              </div>
-
-              <div className={styles.formGroup}>
-                <label className={styles.label}>МЕТОД ТА РАКУРСИ ЗЙОМКИ</label>
-                <select className={styles.select} value={filmingStyle} onChange={(e) => setFilmingStyle(e.target.value)}>
-                  <option>UGC на iPhone (Живий селфі-тест + POV)</option>
-                  <option>Динамічний Speed-Ramp (Швидкі наїзди камери + Zoom-in)</option>
-                  <option>Експертний розбір (Говоряча голова + B-Roll перебивки)</option>
-                  <option>Кінематографічний B-Roll (Slow-motion 60fps + стабілізатор)</option>
-                  <option>POV від першої особи (Погляд клієнта / За кермом)</option>
-                </select>
-              </div>
-
-              <div className={styles.formGroup}>
-                <label className={styles.label}>МЕТА КАМПАНІЇ ТА ОХОПЛЕННЯ</label>
-                <select className={styles.select} value={campaignGoal} onChange={(e) => setCampaignGoal(e.target.value)}>
-                  <option>Холодний трафік (Зачеплення з першої секунди)</option>
-                  <option>Гарячі ліди / Продаж у лоб (Конкретний офер і ціна)</option>
-                  <option>Закриття заперечень (Довіра, стан, Carfax/гарантія)</option>
-                  <option>Ретаргетинг (Лімітована пропозиція / Дедлайн)</option>
-                </select>
-              </div>
-
-              <div className={styles.formGroup}>
-                <label className={styles.label}>ТИП ПСИХОЛОГІЧНОГО ХУКА (0–3 СЕКУНДИ)</label>
-                <select className={styles.select} value={hookType} onChange={(e) => setHookType(e.target.value)}>
-                  <option>Ціна / Вигода (Shock Price / Реальна вартість під ключ)</option>
-                  <option>Особистий досвід (UGC Founder / Чесний огляд без прикрас)</option>
-                  <option>Проблема → Рішення (Problem-Solution / Помилка вибору)</option>
-                  <option>Інтрига / Запитання (Curiosity Gap / «Не купуй, поки...»)</option>
-                  <option>Руйнування міфів (Mythbuster / «Всі думають, що це збиток...»)</option>
-                  <option>Шокуюча статистика (Pattern Interrupt)</option>
-                </select>
               </div>
 
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
-                  <label className={styles.label}>ТОНАЛЬНІСТЬ ОЗВУЧКИ</label>
-                  <select className={styles.select} value={tone} onChange={(e) => setTone(e.target.value)}>
-                    <option>Динамічна та провокативна</option>
-                    <option>Експертна, авторитетна, технічна</option>
-                    <option>Дружня, розмовна, без пафосу (порада знайомого)</option>
-                    <option>Преміальна, спокійна, виважена</option>
+                  <label className={styles.label}>СТИЛЬ ЗЙОМКИ</label>
+                  <select className={styles.select} value={filmingStyle} onChange={(e) => setFilmingStyle(e.target.value)}>
+                    <option>UGC на iPhone (POV)</option>
+                    <option>Speed-Ramp (Зуми)</option>
+                    <option>Експертний розбір</option>
+                    <option>B-Roll (Slow-mo)</option>
+                    <option>POV від 1-ї особи</option>
                   </select>
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label className={styles.label}>ФОРМАТ ВІДЕО</label>
-                  <select className={styles.select} value={format} onChange={(e) => setFormat(e.target.value)}>
-                    <option>TikTok / Reels (9:16 Вертикальне)</option>
-                    <option>Square Post (1:1 Квадратне)</option>
-                    <option>Feed Landscape (16:9 Горизонтальне)</option>
+                  <label className={styles.label}>МЕТА КАМПАНІЇ</label>
+                  <select className={styles.select} value={campaignGoal} onChange={(e) => setCampaignGoal(e.target.value)}>
+                    <option>Холодний трафік</option>
+                    <option>Гарячі ліди (Офер)</option>
+                    <option>Закриття заперечень</option>
+                    <option>Ретаргетинг (Дедлайн)</option>
                   </select>
                 </div>
+              </div>
+
+              <div className={styles.formRow}>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>ХУК (0–3 СЕКУНДИ)</label>
+                  <select className={styles.select} value={hookType} onChange={(e) => setHookType(e.target.value)}>
+                    <option>Ціна / Вигода</option>
+                    <option>Особистий досвід</option>
+                    <option>Проблема → Рішення</option>
+                    <option>Інтрига / Запитання</option>
+                    <option>Руйнування міфів</option>
+                    <option>Шокуюча статистика</option>
+                  </select>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>ТОНАЛЬНІСТЬ</label>
+                  <select className={styles.select} value={tone} onChange={(e) => setTone(e.target.value)}>
+                    <option>Динамічна / Провокативна</option>
+                    <option>Експертна / Технічна</option>
+                    <option>Дружня / Розмовна</option>
+                    <option>Преміальна / Спокійна</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.label}>ФОРМАТ ВІДЕО</label>
+                <select className={styles.select} value={format} onChange={(e) => setFormat(e.target.value)}>
+                  <option>9:16 (Reels / TikTok)</option>
+                  <option>1:1 (Квадратний пост)</option>
+                  <option>16:9 (Горизонтальне)</option>
+                </select>
               </div>
 
               <button type="submit" disabled={isGenerating} className={styles.generateBtn}>
@@ -293,7 +365,7 @@ export default function CreativeStudio() {
                   Готова розкадровка: «{currentBoard.title}»
                 </h2>
                 <div className={styles.metaPillsRow}>
-                  <span className={styles.metaPill}>● Ніша: {currentBoard.niche || 'Авто / E-Commerce'}</span>
+                  <span className={styles.metaPill}>● Ніша: {currentBoard.niche || 'Автобізнес'}</span>
                   <span className={styles.metaPill}>● Хронометраж: {currentBoard.duration}</span>
                   <span className={styles.metaPill}>● Сцен: {currentBoard.scenes?.length || 4}</span>
                   <span className={styles.metaPill}>● Стиль: {filmingStyle.split(' ')[0]}</span>
@@ -374,9 +446,20 @@ export default function CreativeStudio() {
                     <span className={`${styles.sceneBadge} ${badgeClass}`}>
                       СЦЕНА {scene.number} ({scene.time}) &nbsp; {scene.title}
                     </span>
-                    {scene.shotType && (
-                      <span className={styles.shotTypeBadge}>🎥 {scene.shotType}</span>
-                    )}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      {scene.shotType && (
+                        <span className={styles.shotTypeBadge}>🎥 {scene.shotType}</span>
+                      )}
+                      <button
+                        type="button"
+                        className={styles.copySceneBtn}
+                        onClick={() => handleCopySingleScene(scene)}
+                        title="Скопіювати тільки цю сцену"
+                      >
+                        <Copy size={11} />
+                        <span>Копія</span>
+                      </button>
+                    </div>
                   </div>
                   <div>
                     <span className={styles.sceneLabel}>ВІЗУАЛ ТА РОБОТА КАМЕРИ:</span>
@@ -407,9 +490,24 @@ export default function CreativeStudio() {
                 {isPlaying ? <Pause size={18} /> : <Play size={18} style={{ marginLeft: '2px' }} />}
               </button>
               <div className={styles.audioInfo}>
-                <span className={styles.audioTitle}>Дикторська озвучка (AI Voice Simulation)</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                  <span className={styles.audioTitle}>Дикторська озвучка (AI Voice Simulation)</span>
+                  <div className={styles.voiceSwitcher}>
+                    <Volume2 size={13} style={{ color: 'var(--text-muted)' }} />
+                    {['Оксана (AI Natural)', 'Максим (AI Energy)', 'Софія (AI Premium)'].map((voice) => (
+                      <button
+                        key={voice}
+                        type="button"
+                        className={`${styles.voiceBtn} ${selectedVoice === voice ? styles.voiceBtnActive : ''}`}
+                        onClick={() => setSelectedVoice(voice)}
+                      >
+                        {voice.split(' ')[0]}
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <span className={styles.audioMeta}>
-                  Голос: Оксана (Укр - Природний) • {formattedCurrentTime} / {formattedTotalTime}
+                  Голос: {selectedVoice} • {formattedCurrentTime} / {formattedTotalTime}
                 </span>
                 <div className={styles.progressTrack}>
                   <div className={styles.progressBar} style={{ width: `${progressPercent}%` }} />
