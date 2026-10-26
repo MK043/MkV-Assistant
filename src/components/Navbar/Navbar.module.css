@@ -1,0 +1,117 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background-color: transparent;
+  border-bottom: 1px solid var(--border-subtle);
+  min-height: 72px;
+  gap: 20px;
+}
+
+.headerInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.pageTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.breadcrumb {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #0C1322;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  width: 180px;
+  transition: all var(--transition-fast);
+}
+
+.searchBox:focus-within {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+  width: 220px;
+}
+
+.searchInput {
+  width: 100%;
+  color: var(--text-primary);
+}
+
+.searchInput::placeholder {
+  color: var(--text-muted);
+}
+
+.badgePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #0E1628;
+  border: 1px solid var(--border-subtle);
+  padding: 7px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  user-select: none;
+}
+
+.dotGreen {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--color-success);
+  box-shadow: 0 0 6px var(--color-success);
+}
+
+.dateFilter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #0E1628;
+  border: 1px solid var(--border-subtle);
+  padding: 7px 12px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+  color: #FFFFFF;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 13px;
+  box-shadow: 0 0 14px rgba(99, 102, 241, 0.35);
+  transition: all var(--transition-fast);
+}
+
+.primaryBtn:hover {
+  background: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+}
