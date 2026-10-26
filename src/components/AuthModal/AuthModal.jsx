@@ -1,24 +1,35 @@
 import React, { useState } from 'react';
 import { X, CheckCircle2, Lock } from 'lucide-react';
+import { useApp } from '../../context/AppContext';
 import styles from './AuthModal.module.css';
 
-export default function AuthModal({ isOpen, onClose }) {
+export default function AuthModal() {
+  const { isAuthModalOpen, setIsAuthModalOpen, handleLogin } = useApp();
   const [email, setEmail] = useState('mykhailo.bahyn@student.uzhnu.edu.ua');
   const [token, setToken] = useState('mkv_live_token_sec_991823');
   const [rememberMe, setRememberMe] = useState(true);
+  const [resetSent, setResetSent] = useState(false);
 
-  if (!isOpen) return null;
+  if (!isAuthModalOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Успішна автентифікація в системі MkV Sales Manager CRM!');
-    onClose();
+    await handleLogin(email);
+  };
+
+  const handleOAuth = async (provider) => {
+    await handleLogin(`user_${provider.toLowerCase()}@business.mkv`);
+  };
+
+  const handleForgot = () => {
+    setResetSent(true);
+    setTimeout(() => setResetSent(false), 4000);
   };
 
   return (
-    <div className={styles.overlay} onClick={onClose}>
+    <div className={styles.overlay} onClick={() => setIsAuthModalOpen(false)}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <button type="button" className={styles.closeBtn} onClick={onClose}>
+        <button type="button" className={styles.closeBtn} onClick={() => setIsAuthModalOpen(false)}>
           <X size={18} />
         </button>
 
@@ -27,10 +38,10 @@ export default function AuthModal({ isOpen, onClose }) {
         <p className={styles.subtitle}>Платформа управління рекламою Meta Ads та TikTok Ads</p>
 
         <div className={styles.socialButtons}>
-          <button type="button" className={styles.metaBtn} onClick={() => alert('Вхід через Meta Business OAuth 2.0')}>
+          <button type="button" className={styles.metaBtn} onClick={() => handleOAuth('Meta')}>
             <strong>f</strong> Продовжити через Meta Business
           </button>
-          <button type="button" className={styles.googleBtn} onClick={() => alert('Вхід через Google Workspace SSO')}>
+          <button type="button" className={styles.googleBtn} onClick={() => handleOAuth('Google')}>
             <strong>G</strong> Увійти за допомогою Google Workspace
           </button>
         </div>
@@ -76,10 +87,21 @@ export default function AuthModal({ isOpen, onClose }) {
               />
               <span>Запам'ятати мене на цьому пристрої</span>
             </label>
-            <span className={styles.forgotLink} onClick={() => alert('Відновлення доступу відправлено на вашу пошту')}>
+            <span
+              className={styles.forgotLink}
+              onClick={handleForgot}
+              role="button"
+              tabIndex={0}
+            >
               Забули пароль?
             </span>
           </div>
+
+          {resetSent && (
+            <div style={{ fontSize: '12px', color: 'var(--color-success)', marginBottom: '12px', textAlign: 'center' }}>
+              ✓ Посилання для відновлення надіслано на вказану пошту
+            </div>
+          )}
 
           <button type="submit" className={styles.submitBtn}>
             Увійти до панелі таргетолога

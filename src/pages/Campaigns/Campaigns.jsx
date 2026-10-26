@@ -1,30 +1,76 @@
 import React, { useState } from 'react';
 import { Plus, Shield, TrendingUp } from 'lucide-react';
 import Navbar from '../../components/Navbar/Navbar';
+import { useApp } from '../../context/AppContext';
 import styles from './Campaigns.module.css';
 
 export default function Campaigns() {
+  const {
+    campaigns,
+    handleToggleCampaign,
+    searchQuery,
+    activePlatformFilter,
+    setIsCreateModalOpen,
+  } = useApp();
+
   const [activeTab, setActiveTab] = useState('all');
   const [cpaGuardActive, setCpaGuardActive] = useState(true);
   const [roasScalerActive, setRoasScalerActive] = useState(true);
 
-  const [campaigns, setCampaigns] = useState([
-    { id: 1, name: 'EcoCream_Broad_Traffic', platform: 'Meta Ads', isMeta: true, budget: '$150.00 / день', spend: '$4,120.00', cpa: '$10.40', roas: '4.20x', active: true },
-    { id: 2, name: 'TikTok_Spark_TopHook', platform: 'TikTok Ads', isMeta: false, budget: '$100.00 / день', spend: '$2,650.00', cpa: '$9.80', roas: '4.50x', active: true },
-    { id: 3, name: 'Retargeting_Catalog_UA', platform: 'Meta Ads', isMeta: true, budget: '$60.00 / день', spend: '$1,280.00', cpa: '$12.10', roas: '3.80x', active: true },
-    { id: 4, name: 'Promo_BlackFriday_Teaser', platform: 'TikTok Ads', isMeta: false, budget: '$50.00 / день', spend: '$840.00', cpa: '$18.90', roas: '1.80x', active: false },
-    { id: 5, name: 'Old_Creative_Test_PL', platform: 'Meta Ads', isMeta: true, budget: '$30.00 / день', spend: '$420.00', cpa: '$16.20', roas: '2.10x', active: false },
-  ]);
+  // Dynamic Filtering by tab, platform pill filter, and search
+  const filteredCampaigns = campaigns.filter((c) => {
+    // Tab filter
+    if (activeTab === 'active' && !c.active) return false;
+    if (activeTab === 'paused' && c.active) return false;
 
-  const toggleCampaign = (id) => {
-    setCampaigns(campaigns.map(c => c.id === id ? { ...c, active: !c.active } : c));
-  };
+    // Platform pill filter
+    if (activePlatformFilter !== 'all' && c.platform !== activePlatformFilter) {
+      return false;
+    }
 
-  const filteredCampaigns = campaigns.filter(c => {
-    if (activeTab === 'active') return c.active;
-    if (activeTab === 'paused') return !c.active;
+    // Search query filter
+    if (searchQuery.trim() && !c.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+      return false;
+    }
+
     return true;
   });
+
+  const totalCount = campaigns.length;
+  const activeCount = campaigns.filter((c) => c.active).length;
+  const pausedCount = campaigns.filter((c) => !c.active).length;
+
+  const formatBudget = (val) => {
+    if (typeof val === 'number') return `$${val.toFixed(2)} / день`;
+    return String(val);
+  };
+
+  const formatSpend = (val) => {
+    if (typeof val === 'number') {
+      return `$${val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    }
+    return String(val);
+  };
+
+  const formatCpa = (val) => {
+    if (typeof val === 'number') return `$${val.toFixed(2)}`;
+    return String(val);
+  };
+
+  const formatRoas = (val) => {
+    if (typeof val === 'number') return `${val.toFixed(2)}x`;
+    return String(val);
+  };
+
+  const getCpaNumber = (val) => {
+    if (typeof val === 'number') return val;
+    return parseFloat(String(val).replace(/[^0-9.]/g, '')) || 0;
+  };
+
+  const getRoasNumber = (val) => {
+    if (typeof val === 'number') return val;
+    return parseFloat(String(val).replace(/[^0-9.]/g, '')) || 0;
+  };
 
   return (
     <div>
@@ -42,28 +88,28 @@ export default function Campaigns() {
               className={`${styles.tabBtn} ${activeTab === 'all' ? styles.tabBtnActive : ''}`}
               onClick={() => setActiveTab('all')}
             >
-              Всі (8)
+              Всі ({totalCount})
             </button>
             <button
               type="button"
               className={`${styles.tabBtn} ${activeTab === 'active' ? styles.tabBtnActive : ''}`}
               onClick={() => setActiveTab('active')}
             >
-              Активні (5)
+              Активні ({activeCount})
             </button>
             <button
               type="button"
               className={`${styles.tabBtn} ${activeTab === 'paused' ? styles.tabBtnActive : ''}`}
               onClick={() => setActiveTab('paused')}
             >
-              На паузі (3)
+              На паузі ({pausedCount})
             </button>
           </div>
 
           <button
             type="button"
             className={styles.primaryBtn}
-            onClick={() => alert('Створення нової кампанії: підключення Meta Graph API v19')}
+            onClick={() => setIsCreateModalOpen(true)}
           >
             <Plus size={16} />
             <span>Нова кампанія</span>
@@ -86,36 +132,47 @@ export default function Campaigns() {
               </tr>
             </thead>
             <tbody>
-              {filteredCampaigns.map((c) => (
-                <tr key={c.id}>
-                  <td className={styles.campaignName}>{c.name}</td>
-                  <td>
-                    <span className={`${styles.platformPill} ${!c.isMeta ? styles.platformTikTok : ''}`}>
-                      {c.platform}
-                    </span>
-                  </td>
-                  <td>{c.budget}</td>
-                  <td style={{ fontWeight: 600 }}>{c.spend}</td>
-                  <td style={{ color: parseFloat(c.cpa.replace('$', '')) > 15 ? 'var(--color-danger)' : 'inherit' }}>
-                    {c.cpa}
-                  </td>
-                  <td>
-                    <span className={styles.roasVal} style={{ color: parseFloat(c.roas) >= 3.0 ? 'var(--color-success)' : 'var(--color-danger)' }}>
-                      {c.roas}
-                    </span>
-                  </td>
-                  <td>
-                    <label className={styles.switch}>
-                      <input
-                        type="checkbox"
-                        checked={c.active}
-                        onChange={() => toggleCampaign(c.id)}
-                      />
-                      <span className={styles.slider} />
-                    </label>
+              {filteredCampaigns.length === 0 ? (
+                <tr>
+                  <td colSpan={7} style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
+                    Не знайдено кампаній за вибраними критеріями пошуку.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                filteredCampaigns.map((c) => (
+                  <tr key={c.id}>
+                    <td className={styles.campaignName}>{c.name}</td>
+                    <td>
+                      <span className={`${styles.platformPill} ${!c.isMeta ? styles.platformTikTok : ''}`}>
+                        {c.platform}
+                      </span>
+                    </td>
+                    <td>{formatBudget(c.budget)}</td>
+                    <td style={{ fontWeight: 600 }}>{formatSpend(c.spend)}</td>
+                    <td style={{ color: getCpaNumber(c.cpa) > 15 ? 'var(--color-danger)' : 'inherit' }}>
+                      {formatCpa(c.cpa)}
+                    </td>
+                    <td>
+                      <span
+                        className={styles.roasVal}
+                        style={{ color: getRoasNumber(c.roas) >= 3.0 ? 'var(--color-success)' : 'var(--color-danger)' }}
+                      >
+                        {formatRoas(c.roas)}
+                      </span>
+                    </td>
+                    <td>
+                      <label className={styles.switch}>
+                        <input
+                          type="checkbox"
+                          checked={c.active}
+                          onChange={() => handleToggleCampaign(c.id)}
+                        />
+                        <span className={styles.slider} />
+                      </label>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -170,7 +227,14 @@ export default function Campaigns() {
                 <strong>Умова:</strong> якщо кампанія приносить ROAS понад 4.0x при мінімум 10 конверсіях, добовий бюджет зростає на +20%.
               </p>
             </div>
-            <div className={styles.ruleSavedBadge} style={{ color: 'var(--color-success)', borderColor: 'var(--color-success-border)', backgroundColor: 'var(--color-success-bg)' }}>
+            <div
+              className={styles.ruleSavedBadge}
+              style={{
+                color: 'var(--color-success)',
+                borderColor: 'var(--color-success-border)',
+                backgroundColor: 'var(--color-success-bg)',
+              }}
+            >
               Приріст лідів: +18%
             </div>
           </div>

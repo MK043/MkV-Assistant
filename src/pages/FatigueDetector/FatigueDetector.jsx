@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { Zap, Check, RefreshCw } from 'lucide-react';
+import { Zap, CheckCircle2, RefreshCw } from 'lucide-react';
 import Navbar from '../../components/Navbar/Navbar';
+import { useApp } from '../../context/AppContext';
 import styles from './FatigueDetector.module.css';
 
 export default function FatigueDetector() {
+  const { fatigue, handleRotateHook } = useApp();
   const [selectedHookId, setSelectedHookId] = useState(1);
-  const [creatives, setCreatives] = useState([
-    { id: 1, name: 'EcoCream_Hook_Curiosity', platform: 'Meta Reels', holdRate: '48.2% (Відмінно)', freq: '1.6x', status: 'effective', action: 'Масштабувати' },
-    { id: 2, name: 'TikTok_Spark_Review', platform: 'TikTok Ads', holdRate: '39.5% (Добре)', freq: '2.1x', status: 'stable', action: 'Спостереження' },
-    { id: 3, name: 'SummerSale_OldHook', platform: 'TikTok / Reels', holdRate: '14.8% (Падіння!)', freq: '3.4x', status: 'fatigued', action: 'Замінити хук ⚡' },
-  ]);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [notification, setNotification] = useState('');
 
   const hooks = [
     {
@@ -17,27 +16,54 @@ export default function FatigueDetector() {
       variant: 'ВАРІАНТ 1 (ШІ)',
       quote: '«Ця помилка в догляді коштує тобі чистої шкіри...»',
       trigger: 'Психологічний тригер: страх втрати + інтрига.',
-      forecast: 'Прогноз Hold: +24%'
+      forecast: 'Прогноз Hold: +24%',
     },
     {
       id: 2,
       variant: 'ВАРІАНТ 2 (ШІ)',
       quote: '«3 причини, чому твій крем не працює влітку...»',
       trigger: 'Психологічний тригер: список + сезонність.',
-      forecast: 'Прогноз Hold: +19%'
+      forecast: 'Прогноз Hold: +19%',
     },
     {
       id: 3,
       variant: 'ВАРІАНТ 3 (ШІ)',
       quote: '«Показую засіб, який замінив мені 5 баночок...»',
       trigger: 'Психологічний тригер: особистий досвід (UGC).',
-      forecast: 'Прогноз Hold: +28%'
-    }
+      forecast: 'Прогноз Hold: +28%',
+    },
   ];
 
-  const handleApplyHook = () => {
-    const selected = hooks.find(h => h.id === selectedHookId);
-    alert(`Хук "${selected.variant}" успішно замінено у Meta & TikTok через Conversions API без скидання навчання!`);
+  const currentScore = fatigue?.score ?? 24;
+  const currentStatusLabel = fatigue?.statusLabel ?? 'Норма';
+  const currentFrequency = fatigue?.frequency ?? '1.8x';
+  const creativesList = fatigue?.creatives ?? [
+    { id: 1, name: 'EcoCream_Hook_Curiosity', platform: 'Meta Reels', holdRate: '48.2%', freq: '1.6x', status: 'effective', action: 'Масштабувати' },
+    { id: 2, name: 'TikTok_Spark_Review', platform: 'TikTok Ads', holdRate: '39.5%', freq: '2.1x', status: 'stable', action: 'Спостереження' },
+    { id: 3, name: 'SummerSale_OldHook', platform: 'TikTok / Reels', holdRate: '14.8%', freq: '3.4x', status: 'fatigued', action: 'Замінити хук ⚡' },
+  ];
+
+  const fatiguedCount = creativesList.filter((c) => c.status === 'fatigued').length;
+
+  const handleApplyHook = async () => {
+    const selected = hooks.find((h) => h.id === selectedHookId);
+    if (!selected) return;
+
+    setIsUpdating(true);
+    try {
+      await handleRotateHook(selected.variant);
+      setNotification(
+        `Хук «${selected.variant}» успішно синхронізовано з Meta Ads & TikTok Ads. Hold Rate відновлено!`
+      );
+      setTimeout(() => setNotification(''), 6000);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const scrollToRotation = () => {
+    const el = document.getElementById('hook-rotation-panel');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -48,27 +74,52 @@ export default function FatigueDetector() {
       />
 
       <div className={styles.container}>
+        {notification && (
+          <div className={styles.successBanner}>
+            <CheckCircle2 size={18} />
+            <span>{notification}</span>
+          </div>
+        )}
+
         {/* Top Summary Row */}
         <div className={styles.summaryGrid}>
           <div className={styles.summaryCard}>
             <span className={styles.summaryTitle}>Загальний індекс втоми аудиторії (Fatigue Score)</span>
-            <div className={styles.fatigueScoreVal}>24% — Норма</div>
+            <div
+              className={styles.fatigueScoreVal}
+              style={{ color: currentScore <= 20 ? 'var(--color-success)' : 'var(--accent-primary-light)' }}
+            >
+              {currentScore}% — {currentStatusLabel}
+            </div>
             <div className={styles.progressBarTrack}>
-              <div className={styles.progressBarFill} />
+              <div
+                className={styles.progressBarFill}
+                style={{
+                  width: `${currentScore}%`,
+                  backgroundColor: currentScore <= 20 ? 'var(--color-success)' : 'var(--accent-primary)',
+                }}
+              />
             </div>
           </div>
 
           <div className={styles.summaryCard}>
-            <span className={styles.summaryTitle}>Стан аудиторії: Стабільний</span>
+            <span className={styles.summaryTitle}>Стан аудиторії: {currentStatusLabel}</span>
             <p className={styles.statusDesc}>
-              Частота показів (Frequency) 1.8x знаходиться в безпечній зоні. Лише 1 оголошення потребує заміни початкових 3 секунд.
+              Частота показів (Frequency) {currentFrequency} знаходиться в безпечній зоні.
+              {fatiguedCount > 0
+                ? ` ${fatiguedCount} оголошення потребує заміни перших 3 секунд.`
+                : ' Усі активні креативи мають високий рівень утримання (Hold Rate).'}
             </p>
           </div>
 
           <div className={styles.summaryCard}>
             <div className={styles.creativesCount}>
-              <span>Активних креативів: 12</span>
-              <span>Потребують оновлення: 1 креатив</span>
+              <span>Активних креативів: {creativesList.length}</span>
+              <span style={{ color: fatiguedCount > 0 ? 'var(--color-danger)' : 'var(--color-success)' }}>
+                {fatiguedCount > 0
+                  ? `Потребують оновлення: ${fatiguedCount} креатив`
+                  : 'Потребують оновлення: 0 (Все оптимізовано)'}
+              </span>
             </div>
           </div>
         </div>
@@ -92,7 +143,7 @@ export default function FatigueDetector() {
               </tr>
             </thead>
             <tbody>
-              {creatives.map((c) => (
+              {creativesList.map((c) => (
                 <tr key={c.id}>
                   <td className={styles.creativeName}>{c.name}</td>
                   <td>
@@ -111,7 +162,14 @@ export default function FatigueDetector() {
                     <button
                       type="button"
                       className={`${styles.actionBtn} ${c.status === 'fatigued' ? styles.actionBtnActive : ''}`}
-                      onClick={() => c.status === 'fatigued' ? alert('Відкрито швидку ротацію хуків нижче') : alert(`Дію "${c.action}" запущено`)}
+                      onClick={() => {
+                        if (c.status === 'fatigued') {
+                          scrollToRotation();
+                        } else {
+                          setNotification(`Параметри «${c.name}» зафіксовано для алгоритму авто-оптимізації.`);
+                          setTimeout(() => setNotification(''), 4000);
+                        }
+                      }}
                     >
                       {c.action}
                     </button>
@@ -123,7 +181,7 @@ export default function FatigueDetector() {
         </div>
 
         {/* Quick Hook Rotation Panel */}
-        <div className={styles.rotationPanel}>
+        <div id="hook-rotation-panel" className={styles.rotationPanel}>
           <div>
             <h2 className={styles.cardTitle}>Швидка ротація хука для «SummerSale_OldHook»</h2>
             <p className={styles.cardSub}>
@@ -157,11 +215,16 @@ export default function FatigueDetector() {
 
           <button
             type="button"
+            disabled={isUpdating}
             className={styles.applyAllBtn}
             onClick={handleApplyHook}
           >
-            <Zap size={16} />
-            <span>Оновити хук у Facebook & TikTok без перезапуску кампанії</span>
+            {isUpdating ? <RefreshCw size={16} className={styles.spin} /> : <Zap size={16} />}
+            <span>
+              {isUpdating
+                ? 'Оновлення креативу в рекламних кабінетах...'
+                : 'Оновити хук у Facebook & TikTok без перезапуску кампанії'}
+            </span>
           </button>
         </div>
       </div>

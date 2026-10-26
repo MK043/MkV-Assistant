@@ -1,8 +1,11 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useApp } from '../../context/AppContext';
 import styles from './Sidebar.module.css';
 
-export default function Sidebar({ onOpenAuth }) {
+export default function Sidebar() {
+  const { user, setIsAuthModalOpen, handleLogout } = useApp();
+
   const navItems = [
     { label: 'Огляд платформи', path: '/hub' },
     { label: 'Дашборд аналітики', path: '/analytics' },
@@ -10,6 +13,12 @@ export default function Sidebar({ onOpenAuth }) {
     { label: 'Кампанії та медіабаїнг', path: '/campaigns' },
     { label: 'Вигорання та хуки', path: '/fatigue' },
   ];
+
+  const getInitials = (name) => {
+    if (!name) return 'MK';
+    const parts = name.split(' ');
+    return parts.length > 1 ? `${parts[0][0]}${parts[1][0]}` : name.slice(0, 2).toUpperCase();
+  };
 
   return (
     <aside className={styles.sidebar}>
@@ -39,25 +48,41 @@ export default function Sidebar({ onOpenAuth }) {
         </div>
 
         <div className={styles.navGroup}>
-          <span className={styles.groupLabel}>БЕЗПЕКА</span>
-          <button
-            type="button"
-            className={styles.navItem}
-            onClick={onOpenAuth}
-          >
-            <span className={styles.navDot} />
-            <span>Авторизація / Вхід</span>
-          </button>
+          <span className={styles.groupLabel}>БЕЗПЕКА ТА ДОСТУП</span>
+          {user.isLoggedIn ? (
+            <button
+              type="button"
+              className={styles.navItem}
+              onClick={handleLogout}
+              title="Натисніть для виходу"
+            >
+              <span className={styles.navDot} />
+              <span>Вийти з кабінету</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              className={styles.navItem}
+              onClick={() => setIsAuthModalOpen(true)}
+            >
+              <span className={styles.navDot} />
+              <span>Авторизація / Вхід</span>
+            </button>
+          )}
         </div>
       </div>
 
       <div className={styles.userCard}>
-        <div className={styles.avatar}>МБ</div>
+        <div className={styles.avatar}>{getInitials(user.name)}</div>
         <div className={styles.userInfo}>
-          <span className={styles.userName}>Михайло Багин</span>
-          <span className={styles.userSub}>Студент ІПЗ-1 • УжНУ</span>
+          <span className={styles.userName}>{user.name}</span>
+          <span className={styles.userSub}>{user.role}</span>
         </div>
-        <div className={styles.statusDot} title="Online" />
+        <div
+          className={styles.statusDot}
+          style={{ backgroundColor: user.isLoggedIn ? 'var(--color-success)' : 'var(--text-disabled)' }}
+          title={user.isLoggedIn ? 'Авторизовано в системі' : 'Гість'}
+        />
       </div>
     </aside>
   );

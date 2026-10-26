@@ -1,18 +1,65 @@
-import React, { useState } from 'react';
-import { Zap, Play, Pause } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Zap, Play, Pause, Loader2 } from 'lucide-react';
 import Navbar from '../../components/Navbar/Navbar';
+import { useApp } from '../../context/AppContext';
 import styles from './CreativeStudio.module.css';
 
 export default function CreativeStudio() {
+  const { storyboard, handleGenerateStoryboard } = useApp();
+  
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [isGenerating, setIsGenerating] = useState(false);
+
   const [productName, setProductName] = useState('Натуральна сироватка для обличчя');
   const [format, setFormat] = useState('TikTok / Reels (9:16 Вертикальне)');
   const [hookType, setHookType] = useState('Проблема → Рішення (Problem-Solution)');
   const [tone, setTone] = useState('Дружня, експертна, без реклами в лоб');
 
-  const handleGenerate = () => {
-    alert(`Згенеровано нову розкадровку для: "${productName}" з хуком: "${hookType}"`);
+  // Audio simulation timer
+  useEffect(() => {
+    let interval = null;
+    if (isPlaying) {
+      interval = setInterval(() => {
+        setCurrentTime((prev) => {
+          if (prev >= 20) {
+            setIsPlaying(false);
+            return 0;
+          }
+          return prev + 1;
+        });
+      }, 1000);
+    } else {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [isPlaying]);
+
+  const handleGenerate = async (e) => {
+    e.preventDefault();
+    setIsGenerating(true);
+    try {
+      await handleGenerateStoryboard({
+        product: productName,
+        format,
+        hookType,
+        tone,
+      });
+      setIsPlaying(false);
+      setCurrentTime(0);
+    } finally {
+      setIsGenerating(false);
+    }
   };
+
+  const currentBoard = storyboard || {
+    title: 'EcoCosmetics — Ранковий догляд',
+    duration: '20 секунд',
+    scenes: [],
+  };
+
+  const progressPercent = (currentTime / 20) * 100;
+  const formattedTime = `0:${currentTime < 10 ? '0' : ''}${currentTime}`;
 
   return (
     <div>
@@ -28,48 +75,60 @@ export default function CreativeStudio() {
             <h2 className={styles.panelTitle}>ШІ-Генератор сценаріїв</h2>
             <p className={styles.panelSub}>Автоматичний розрахунок таймлайну</p>
 
-            <div className={styles.formGroup}>
-              <label className={styles.label}>ПРОДУКТ ЧИ ПОСЛУГА</label>
-              <input
-                type="text"
-                className={styles.input}
-                value={productName}
-                onChange={(e) => setProductName(e.target.value)}
-              />
-            </div>
+            <form onSubmit={handleGenerate}>
+              <div className={styles.formGroup}>
+                <label className={styles.label}>ПРОДУКТ ЧИ ПОСЛУГА</label>
+                <input
+                  type="text"
+                  required
+                  className={styles.input}
+                  value={productName}
+                  onChange={(e) => setProductName(e.target.value)}
+                />
+              </div>
 
-            <div className={styles.formGroup}>
-              <label className={styles.label}>ФОРМАТ ВІДЕО</label>
-              <select className={styles.select} value={format} onChange={(e) => setFormat(e.target.value)}>
-                <option>TikTok / Reels (9:16 Вертикальне)</option>
-                <option>Square Post (1:1 Квадратне)</option>
-                <option>Feed Landscape (16:9 Горизонтальне)</option>
-              </select>
-            </div>
+              <div className={styles.formGroup}>
+                <label className={styles.label}>ФОРМАТ ВІДЕО</label>
+                <select className={styles.select} value={format} onChange={(e) => setFormat(e.target.value)}>
+                  <option>TikTok / Reels (9:16 Вертикальне)</option>
+                  <option>Square Post (1:1 Квадратне)</option>
+                  <option>Feed Landscape (16:9 Горизонтальне)</option>
+                </select>
+              </div>
 
-            <div className={styles.formGroup}>
-              <label className={styles.label}>ТИП ХУКА (ПЕРШІ 3 СЕКУНДИ)</label>
-              <select className={styles.select} value={hookType} onChange={(e) => setHookType(e.target.value)}>
-                <option>Проблема → Рішення (Problem-Solution)</option>
-                <option>Інтрига / Запитання (Curiosity Gap)</option>
-                <option>Шокуюча статистика (Pattern Interrupt)</option>
-                <option>Особистий досвід (UGC Founder Story)</option>
-              </select>
-            </div>
+              <div className={styles.formGroup}>
+                <label className={styles.label}>ТИП ХУКА (ПЕРШІ 3 СЕКУНДИ)</label>
+                <select className={styles.select} value={hookType} onChange={(e) => setHookType(e.target.value)}>
+                  <option>Проблема → Рішення (Problem-Solution)</option>
+                  <option>Інтрига / Запитання (Curiosity Gap)</option>
+                  <option>Шокуюча статистика (Pattern Interrupt)</option>
+                  <option>Особистий досвід (UGC Founder Story)</option>
+                </select>
+              </div>
 
-            <div className={styles.formGroup}>
-              <label className={styles.label}>ТОНАЛЬНІСТЬ ОЗВУЧКИ</label>
-              <select className={styles.select} value={tone} onChange={(e) => setTone(e.target.value)}>
-                <option>Дружня, експертна, без реклами в лоб</option>
-                <option>Динамічна та провокативна</option>
-                <option>Спокійна, естетична (ASMR)</option>
-              </select>
-            </div>
+              <div className={styles.formGroup}>
+                <label className={styles.label}>ТОНАЛЬНІСТЬ ОЗВУЧКИ</label>
+                <select className={styles.select} value={tone} onChange={(e) => setTone(e.target.value)}>
+                  <option>Дружня, експертна, без реклами в лоб</option>
+                  <option>Динамічна та провокативна</option>
+                  <option>Спокійна, естетична (ASMR)</option>
+                </select>
+              </div>
 
-            <button type="button" className={styles.generateBtn} onClick={handleGenerate}>
-              <Zap size={16} />
-              <span>Згенерувати розкадровку</span>
-            </button>
+              <button type="submit" disabled={isGenerating} className={styles.generateBtn}>
+                {isGenerating ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" />
+                    <span>ШІ формує розкадровку...</span>
+                  </>
+                ) : (
+                  <>
+                    <Zap size={16} />
+                    <span>Згенерувати розкадровку</span>
+                  </>
+                )}
+              </button>
+            </form>
           </div>
 
           <div className={styles.panelCard}>
@@ -96,54 +155,33 @@ export default function CreativeStudio() {
           <div className={styles.panelCard}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <div>
-                <h2 className={styles.panelTitle}>Готова розкадровка: «EcoCosmetics — Ранковий догляд»</h2>
-                <p className={styles.panelSub} style={{ margin: 0 }}>● Готово до зйомки та монтажу (тривалість 20 секунд)</p>
+                <h2 className={styles.panelTitle}>Готова розкадровка: «{currentBoard.title}»</h2>
+                <p className={styles.panelSub} style={{ margin: 0 }}>
+                  ● Готово до зйомки та монтажу (тривалість {currentBoard.duration})
+                </p>
               </div>
             </div>
 
-            {/* Scene 1 */}
-            <div className={styles.sceneCard}>
-              <span className={styles.sceneBadge}>СЦЕНА 1 (0–3с) &nbsp; Хук (Привернення 80% уваги)</span>
-              <div>
-                <span className={styles.sceneLabel}>ВІЗУАЛ НА ЕКРАНІ:</span>
-                <p className={styles.sceneText}>Крупний план обличчя в дзеркалі, дівчина розчаровано змиває водою звичайний крем.</p>
-              </div>
-              <div>
-                <span className={styles.sceneLabel}>ТЕКСТ НА ВІДЕО ТА ОЗВУЧКА:</span>
-                <p className={styles.sceneQuote}>«Чому твій крем забиває пори, а не зволожує? Якщо шкіра досі тьмяна — викинь його...»</p>
-              </div>
-              <span className={styles.tagPill}>Hold Rate ціль: &gt; 40%</span>
-            </div>
-
-            {/* Scene 2 */}
-            <div className={`${styles.sceneCard} ${styles.sceneCard2}`}>
-              <span className={`${styles.sceneBadge} ${styles.sceneBadge2}`}>СЦЕНА 2 (4–14с) &nbsp; Демонстрація проблеми та засобу</span>
-              <div>
-                <span className={styles.sceneLabel}>ВІЗУАЛ НА ЕКРАНІ:</span>
-                <p className={styles.sceneText}>Кадр з текстурою легкої сироватки з пептидами. Швидке вбирання, миттєве сяйво без липкості.</p>
-              </div>
-              <div>
-                <span className={styles.sceneLabel}>ТЕКСТ НА ВІДЕО ТА ОЗВУЧКА:</span>
-                <p className={styles.sceneQuote}>«100% рослинні пептиди проникають глибоко в дерму. Замінює 3 звичайні баночки щоранку.»</p>
-              </div>
-              <span className={styles.tagPill}>Демонстрація продукту</span>
-            </div>
-
-            {/* Scene 3 */}
-            <div className={`${styles.sceneCard} ${styles.sceneCard3}`}>
-              <span className={`${styles.sceneBadge} ${styles.sceneBadge3}`}>СЦЕНА 3 (15–20с) &nbsp; Заклик до дії (Конверсія / Офер)</span>
-              <div>
-                <span className={styles.sceneLabel}>ВІЗУАЛ НА ЕКРАНІ:</span>
-                <p className={styles.sceneText}>Фірмова баночка поруч зі стрілкою на кнопку замовлення. Плашка зі знижкою -25%.</p>
-              </div>
-              <div>
-                <span className={styles.sceneLabel}>ТЕКСТ НА ВІДЕО ТА ОЗВУЧКА:</span>
-                <p className={styles.sceneQuote}>«Тисни на посилання під відео та забирай набір зі знижкою 25% і безкоштовною доставкою!»</p>
-              </div>
-              <span className={styles.tagPill} style={{ backgroundColor: 'rgba(16, 185, 129, 0.15)', color: 'var(--color-success)' }}>
-                Офер: Знижка -25%
-              </span>
-            </div>
+            {currentBoard.scenes && currentBoard.scenes.map((scene, idx) => {
+              const cardClass = idx === 1 ? styles.sceneCard2 : idx === 2 ? styles.sceneCard3 : '';
+              const badgeClass = idx === 1 ? styles.sceneBadge2 : idx === 2 ? styles.sceneBadge3 : '';
+              return (
+                <div key={idx} className={`${styles.sceneCard} ${cardClass}`}>
+                  <span className={`${styles.sceneBadge} ${badgeClass}`}>
+                    СЦЕНА {scene.number} ({scene.time}) &nbsp; {scene.title}
+                  </span>
+                  <div>
+                    <span className={styles.sceneLabel}>ВІЗУАЛ НА ЕКРАНІ:</span>
+                    <p className={styles.sceneText}>{scene.visual}</p>
+                  </div>
+                  <div>
+                    <span className={styles.sceneLabel}>ТЕКСТ НА ВІДЕО ТА ОЗВУЧКА:</span>
+                    <p className={styles.sceneQuote}>{scene.quote}</p>
+                  </div>
+                  <span className={styles.tagPill}>{scene.tag}</span>
+                </div>
+              );
+            })}
 
             {/* Audio Voiceover Bar */}
             <div className={styles.audioBar}>
@@ -156,9 +194,11 @@ export default function CreativeStudio() {
               </button>
               <div className={styles.audioInfo}>
                 <span className={styles.audioTitle}>Дикторська озвучка (AI Voice)</span>
-                <span className={styles.audioMeta}>Голос: Оксана (Укр - Природний) • {isPlaying ? '0:07 / 0:20' : '0:00 / 0:20'}</span>
+                <span className={styles.audioMeta}>
+                  Голос: Оксана (Укр - Природний) • {formattedTime} / 0:20
+                </span>
                 <div className={styles.progressTrack}>
-                  <div className={styles.progressBar} style={{ width: isPlaying ? '35%' : '0%' }} />
+                  <div className={styles.progressBar} style={{ width: `${progressPercent}%` }} />
                 </div>
               </div>
             </div>

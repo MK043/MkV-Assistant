@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { useApp } from './context/AppContext';
 import Sidebar from './components/Sidebar/Sidebar';
 import AuthModal from './components/AuthModal/AuthModal';
+import CreateCampaignModal from './components/CreateCampaignModal/CreateCampaignModal';
 import MasterHub from './pages/MasterHub/MasterHub';
 import Analytics from './pages/Analytics/Analytics';
 import CreativeStudio from './pages/CreativeStudio/CreativeStudio';
@@ -11,11 +13,11 @@ import NotFound from './pages/NotFound/NotFound';
 import styles from './App.module.css';
 
 export default function App() {
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const { isCreateModalOpen, setIsCreateModalOpen, handleCreateCampaign } = useApp();
 
   return (
     <div className={styles.appLayout}>
-      <Sidebar onOpenAuth={() => setIsAuthOpen(true)} />
+      <Sidebar />
 
       <main className={styles.mainContent}>
         <Routes>
@@ -29,7 +31,12 @@ export default function App() {
         </Routes>
       </main>
 
-      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
+      <AuthModal />
+      <CreateCampaignModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onCreate={handleCreateCampaign}
+      />
     </div>
   );
 }

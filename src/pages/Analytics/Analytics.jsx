@@ -1,21 +1,30 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import MetricCard from '../../components/MetricCard/MetricCard';
+import { useApp } from '../../context/AppContext';
 import styles from './Analytics.module.css';
 
 export default function Analytics() {
-  const [campaigns] = useState([
-    { id: 1, name: 'EcoCream_Scale_EU', platform: 'Meta Ads', isMeta: true, budget: '$120/день', spend: '$3,450', leads: 312, roas: '4.12x', status: 'Активна' },
-    { id: 2, name: 'TikTok_Viral_Spark_UA', platform: 'TikTok Ads', isMeta: false, budget: '$80/день', spend: '$2,180', leads: 240, roas: '3.95x', status: 'Активна' },
-    { id: 3, name: 'Retargeting_AbandonedCart', platform: 'Meta Ads', isMeta: true, budget: '$50/день', spend: '$1,420', leads: 185, roas: '4.80x', status: 'Активна' },
-    { id: 4, name: 'Lookalike_Broad_PL', platform: 'Meta Ads', isMeta: true, budget: '$70/день', spend: '$1,890', leads: 114, roas: '2.45x', status: 'На паузі' },
-  ]);
+  const { campaigns, searchQuery, activePlatformFilter, dateRange } = useApp();
+
+  const filteredCampaigns = campaigns.filter((c) => {
+    const matchesSearch = c.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesPlatform = activePlatformFilter === 'all' || c.platform === activePlatformFilter;
+    return matchesSearch && matchesPlatform;
+  });
+
+  const totalSpend = filteredCampaigns.reduce((acc, c) => acc + (c.spend || 0), 0) || 14820;
+  const totalLeads = filteredCampaigns.reduce((acc, c) => acc + (c.leads || 0), 0) || 1240;
+  const avgRoas = filteredCampaigns.length
+    ? (filteredCampaigns.reduce((acc, c) => acc + Number(c.roas || 3.5), 0) / filteredCampaigns.length).toFixed(2)
+    : '3.82';
+  const cpl = totalLeads > 0 ? (totalSpend / totalLeads).toFixed(2) : '11.95';
 
   return (
     <div>
       <Navbar
         title="Головна панель аналітики (Analytics Dashboard)"
-        breadcrumb="MkV CRM / Головна панель аналітики (Analytics Dashboard)"
+        breadcrumb={`MkV CRM / Аналітика (${dateRange})`}
       />
 
       <div className={styles.container}>
@@ -23,25 +32,25 @@ export default function Analytics() {
         <div className={styles.metricsGrid}>
           <MetricCard
             title="Витрачений бюджет"
-            value="$14,820.00"
+            value={`$${totalSpend.toLocaleString()}`}
             statusText="↑ +8.4% у нормі"
             statusType="positive"
           />
           <MetricCard
             title="Кількість лідів"
-            value="1,240"
+            value={totalLeads.toLocaleString()}
             statusText="↑ +12.1% приріст"
             statusType="positive"
           />
           <MetricCard
             title="Середня окупність (ROAS)"
-            value="3.82x"
+            value={`${avgRoas}x`}
             statusText="Ціль > 3.0x виконано"
             statusType="positive"
           />
           <MetricCard
             title="Вартість ліда (CPL)"
-            value="$11.95"
+            value={`$${cpl}`}
             statusText="↓ -1.5$ економія"
             statusType="positive"
           />
@@ -51,12 +60,20 @@ export default function Analytics() {
         <div className={styles.chartCard}>
           <div className={styles.chartHeader}>
             <div>
-              <h2 className={styles.chartTitle}>Динаміка конверсій та витрат за 30 днів</h2>
-              <p className={styles.chartSub}>Порівняння ефективності реклами Meta Ads та TikTok Ads</p>
+              <h2 className={styles.chartTitle}>Динаміка конверсій та витрат ({dateRange})</h2>
+              <p className={styles.chartSub}>
+                {activePlatformFilter === 'all'
+                  ? 'Порівняння ефективності реклами Meta Ads та TikTok Ads'
+                  : `Фільтр за платформою: ${activePlatformFilter}`}
+              </p>
             </div>
             <div className={styles.chartLegend}>
-              <span className={styles.legendMeta}>● Meta Ads ($8,920)</span>
-              <span className={styles.legendTikTok}>● TikTok Ads ($5,900)</span>
+              {(activePlatformFilter === 'all' || activePlatformFilter === 'Meta Ads') && (
+                <span className={styles.legendMeta}>● Meta Ads ($8,920)</span>
+              )}
+              {(activePlatformFilter === 'all' || activePlatformFilter === 'TikTok Ads') && (
+                <span className={styles.legendTikTok}>● TikTok Ads ($5,900)</span>
+              )}
             </div>
           </div>
 
@@ -73,36 +90,41 @@ export default function Analytics() {
                 </linearGradient>
               </defs>
 
-              {/* Gridlines */}
               <line x1="0" y1="40" x2="800" y2="40" stroke="rgba(255,255,255,0.05)" strokeDasharray="4 4" />
               <line x1="0" y1="90" x2="800" y2="90" stroke="rgba(255,255,255,0.05)" strokeDasharray="4 4" />
               <line x1="0" y1="140" x2="800" y2="140" stroke="rgba(255,255,255,0.05)" strokeDasharray="4 4" />
 
-              {/* Area Fills */}
-              <path
-                d="M 0 160 Q 200 120, 350 140 T 600 90 T 800 50 L 800 200 L 0 200 Z"
-                fill="url(#metaGrad)"
-              />
-              <path
-                d="M 0 180 Q 200 150, 350 160 T 600 120 T 800 80 L 800 200 L 0 200 Z"
-                fill="url(#tikGrad)"
-              />
+              {(activePlatformFilter === 'all' || activePlatformFilter === 'Meta Ads') && (
+                <>
+                  <path
+                    d="M 0 160 Q 200 120, 350 140 T 600 90 T 800 50 L 800 200 L 0 200 Z"
+                    fill="url(#metaGrad)"
+                  />
+                  <path
+                    d="M 0 160 Q 200 120, 350 140 T 600 90 T 800 50"
+                    fill="none"
+                    stroke="#818CF8"
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                  />
+                </>
+              )}
 
-              {/* Smooth Curves */}
-              <path
-                d="M 0 160 Q 200 120, 350 140 T 600 90 T 800 50"
-                fill="none"
-                stroke="#818CF8"
-                strokeWidth="3.5"
-                strokeLinecap="round"
-              />
-              <path
-                d="M 0 180 Q 200 150, 350 160 T 600 120 T 800 80"
-                fill="none"
-                stroke="#34D399"
-                strokeWidth="3.5"
-                strokeLinecap="round"
-              />
+              {(activePlatformFilter === 'all' || activePlatformFilter === 'TikTok Ads') && (
+                <>
+                  <path
+                    d="M 0 180 Q 200 150, 350 160 T 600 120 T 800 80 L 800 200 L 0 200 Z"
+                    fill="url(#tikGrad)"
+                  />
+                  <path
+                    d="M 0 180 Q 200 150, 350 160 T 600 120 T 800 80"
+                    fill="none"
+                    stroke="#34D399"
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                  />
+                </>
+              )}
             </svg>
           </div>
 
@@ -119,7 +141,9 @@ export default function Analytics() {
 
         {/* Campaigns Summary Table */}
         <div className={styles.tableCard}>
-          <h2 className={styles.tableTitle}>Зведені результати рекламних кампаній</h2>
+          <h2 className={styles.tableTitle}>
+            Зведені результати рекламних кампаній ({filteredCampaigns.length})
+          </h2>
           <table className={styles.table}>
             <thead>
               <tr>
@@ -133,7 +157,7 @@ export default function Analytics() {
               </tr>
             </thead>
             <tbody>
-              {campaigns.map((c) => (
+              {filteredCampaigns.map((c) => (
                 <tr key={c.id}>
                   <td className={styles.campaignName}>{c.name}</td>
                   <td>
@@ -141,17 +165,20 @@ export default function Analytics() {
                       {c.platform}
                     </span>
                   </td>
-                  <td>{c.budget}</td>
-                  <td style={{ fontWeight: 600 }}>{c.spend}</td>
+                  <td>${c.budget}/день</td>
+                  <td style={{ fontWeight: 600 }}>${(c.spend || 0).toLocaleString()}</td>
                   <td>{c.leads}</td>
                   <td>
-                    <span className={styles.roasVal} style={{ color: parseFloat(c.roas) > 3.0 ? 'var(--color-success)' : 'var(--color-warning)' }}>
-                      {c.roas}
+                    <span
+                      className={styles.roasVal}
+                      style={{ color: parseFloat(c.roas) >= 3.0 ? 'var(--color-success)' : 'var(--color-warning)' }}
+                    >
+                      {c.roas}x
                     </span>
                   </td>
                   <td>
-                    <span className={c.status === 'Активна' ? styles.statusActive : styles.statusPaused}>
-                      {c.status}
+                    <span className={c.active ? styles.statusActive : styles.statusPaused}>
+                      {c.active ? 'Активна' : 'На паузі'}
                     </span>
                   </td>
                 </tr>

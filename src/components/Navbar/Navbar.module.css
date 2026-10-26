@@ -73,6 +73,20 @@
   font-weight: 600;
   color: var(--text-secondary);
   user-select: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.badgePill:hover {
+  background-color: #141F38;
+  color: var(--text-primary);
+}
+
+.badgePillActive {
+  background-color: #172444;
+  border-color: var(--accent-primary);
+  color: #FFFFFF;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
 }
 
 .dotGreen {

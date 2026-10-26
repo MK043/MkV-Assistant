@@ -1,11 +1,18 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BarChart3, Clapperboard, Rocket, Flame, ArrowRight, Plus } from 'lucide-react';
+import { BarChart3, Clapperboard, Rocket, Flame, ArrowRight } from 'lucide-react';
 import Navbar from '../../components/Navbar/Navbar';
+import { useApp } from '../../context/AppContext';
 import styles from './MasterHub.module.css';
 
 export default function MasterHub() {
   const navigate = useNavigate();
+  const { campaigns, setIsCreateModalOpen, user } = useApp();
+
+  const activeCampaigns = campaigns.filter((c) => c.active);
+  const totalSpend = campaigns.reduce((acc, c) => acc + (c.spend || 0), 14820);
+  const totalLeads = campaigns.reduce((acc, c) => acc + (c.leads || 0), 1240);
+  const avgRoas = (campaigns.reduce((acc, c) => acc + Number(c.roas || 3.5), 0) / (campaigns.length || 1)).toFixed(2);
 
   return (
     <div>
@@ -13,19 +20,19 @@ export default function MasterHub() {
         title="Головний огляд платформи (Master Hub)"
         breadcrumb="MkV CRM / Головний огляд платформи (Master Hub)"
         actionLabel="+ Створити кампанію"
-        onActionClick={() => navigate('/campaigns')}
+        onActionClick={() => setIsCreateModalOpen(true)}
       />
 
       <div className={styles.container}>
         {/* Top Welcome Banner */}
         <div className={styles.welcomeBanner}>
           <div className={styles.welcomeText}>
-            <h2>Вітаємо у MkV Sales Manager CRM, Михайле 👋</h2>
-            <p>Усі рекламні кабінети підключені та синхронізовані. Система готова до запуску та оптимізації кампаній.</p>
+            <h2>Вітаємо у MkV Sales Manager CRM, {user.name.split(' ')[0]} 👋</h2>
+            <p>Усі рекламні кабінети підключені та синхронізовані. Система готова до оптимізації кампаній.</p>
             <div className={styles.bannerStats}>
               <span className={styles.bannerBadge}>● За останні 24г: $640 витрат</span>
               <span className={styles.bannerBadge}>● 54 нові ліди</span>
-              <span className={`${styles.bannerBadge} ${styles.bannerBadgeInfo}`}>● Середній ROAS 3.92x</span>
+              <span className={`${styles.bannerBadge} ${styles.bannerBadgeInfo}`}>● Середній ROAS {avgRoas}x</span>
             </div>
           </div>
         </div>
@@ -50,15 +57,15 @@ export default function MasterHub() {
               <div className={styles.statsRow}>
                 <div className={styles.statItem}>
                   <span className={styles.statLabel}>ВИТРАТИ</span>
-                  <span className={styles.statVal}>$14,820</span>
+                  <span className={styles.statVal}>${totalSpend.toLocaleString()}</span>
                 </div>
                 <div className={styles.statItem}>
                   <span className={styles.statLabel}>СЕРЕДНІЙ ROAS</span>
-                  <span className={styles.statVal} style={{ color: 'var(--color-success)' }}>3.82x</span>
+                  <span className={styles.statVal} style={{ color: 'var(--color-success)' }}>{avgRoas}x</span>
                 </div>
                 <div className={styles.statItem}>
                   <span className={styles.statLabel}>ЛІДИ</span>
-                  <span className={styles.statVal}>1,240</span>
+                  <span className={styles.statVal}>{totalLeads.toLocaleString()}</span>
                 </div>
               </div>
               <button
@@ -130,7 +137,7 @@ export default function MasterHub() {
               <div className={styles.statsRow}>
                 <div className={styles.statItem}>
                   <span className={styles.statLabel}>АКТИВНІ КАМПАНІЇ</span>
-                  <span className={styles.statVal}>5 кампаній</span>
+                  <span className={styles.statVal}>{activeCampaigns.length} з {campaigns.length}</span>
                 </div>
                 <div className={styles.statItem}>
                   <span className={styles.statLabel}>CPA GUARD</span>
