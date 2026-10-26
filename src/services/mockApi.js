@@ -1,5 +1,6 @@
 // Mock API Service for MkV Sales Manager CRM
 // Simulates asynchronous REST API calls with LocalStorage persistence
+import { generateSmartStoryboard } from './aiScriptEngine';
 
 const STORAGE_KEYS = {
   CAMPAIGNS: 'mkv_campaigns_v1',
@@ -204,43 +205,9 @@ export const mockApi = {
     return getStorage(STORAGE_KEYS.STORYBOARD, initialStoryboard);
   },
 
-  async generateStoryboard({ product, hookType, tone, format }) {
+  async generateStoryboard(params) {
     await new Promise((r) => setTimeout(r, 600)); // realistic generation delay
-    const pName = product.trim() || 'Продукт бренду';
-    const generated = {
-      title: `${pName} — Оптимізований ролик`,
-      duration: '20 секунд',
-      product: pName,
-      hookType,
-      tone,
-      format,
-      scenes: [
-        {
-          number: 1,
-          time: '0–3с',
-          title: `Хук (${hookType.split(' ')[0]})`,
-          visual: `Динамічний кадр: розпаковка чи демонстрація проблеми, яку вирішує ${pName}.`,
-          quote: `«Більшість робить цю помилку щодня... Якщо твій засіб не дає результату — подивись на ${pName}!»`,
-          tag: 'Hold Rate ціль: > 45%',
-        },
-        {
-          number: 2,
-          time: '4–14с',
-          title: 'Основна частина (Демонстрація переваг)',
-          visual: `Макрозйомка застосування ${pName}. Інфографіка ключевих компонентів та швидка дія.`,
-          quote: `«Формула з доведеною ефективністю. Працює вже з першого використання без побічних ефектів.»`,
-          tag: 'Продуктовий фокус',
-        },
-        {
-          number: 3,
-          time: '15–20с',
-          title: 'Фінальний CTA (Заклик до дії)',
-          visual: `Фінальний пакшот ${pName} зі спеціальною пропозицією та кнопкою замовлення.`,
-          quote: `«Замовляй просто зараз за посиланням під відео та отримай знижку -20% на перше замовлення!»`,
-          tag: 'Офер: Знижка -20%',
-        },
-      ],
-    };
+    const generated = generateSmartStoryboard(params);
     setStorage(STORAGE_KEYS.STORYBOARD, generated);
     return generated;
   },
