@@ -18,8 +18,10 @@ import {
   X,
   CheckSquare,
   SlidersHorizontal,
+  Calculator,
 } from 'lucide-react';
 import Navbar from '../../components/Navbar/Navbar';
+import RoasCalculator from '../../components/RoasCalculator/RoasCalculator';
 import { useApp } from '../../context/AppContext';
 import styles from './Campaigns.module.css';
 
@@ -51,6 +53,9 @@ export default function Campaigns() {
 
   // Expandable Auction Details Drawer
   const [expandedRowId, setExpandedRowId] = useState(null);
+
+  // Toggle unit economics & daily budget calculator
+  const [showCalculator, setShowCalculator] = useState(false);
 
   // Auto-rules switches
   const [cpaGuardActive, setCpaGuardActive] = useState(true);
@@ -328,8 +333,25 @@ export default function Campaigns() {
               <Download size={14} />
               <span>Експорт CSV</span>
             </button>
+
+            <button
+              type="button"
+              className={`${styles.secondaryBtn} ${showCalculator ? styles.calcBtnActive : ''}`}
+              onClick={() => setShowCalculator(!showCalculator)}
+              title="Розрахувати рекомендований добовий бюджет для Meta та TikTok"
+            >
+              <Calculator size={14} />
+              <span>{showCalculator ? 'Сховати калькулятор' : 'Калькулятор бюджету'}</span>
+            </button>
           </div>
         </div>
+
+        {/* Optional Collapsible Unit Economics & Budget Calculator */}
+        {showCalculator && (
+          <div style={{ marginTop: '-8px' }}>
+            <RoasCalculator />
+          </div>
+        )}
 
         {/* Floating Bulk Action Bar when campaigns are selected */}
         {selectedIds.length > 0 && (

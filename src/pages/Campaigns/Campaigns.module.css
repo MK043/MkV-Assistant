@@ -115,6 +115,13 @@
   color: var(--color-success) !important;
 }
 
+.calcBtnActive {
+  background: rgba(99, 102, 241, 0.22) !important;
+  border-color: var(--accent-primary) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
+}
+
 /* Floating / Docked Bulk Actions Bar */
 .bulkActionBar {
   display: flex;
