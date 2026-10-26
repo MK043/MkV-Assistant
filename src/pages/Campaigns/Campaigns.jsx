@@ -24,16 +24,13 @@ export default function Campaigns() {
   const [cpaGuardActive, setCpaGuardActive] = useState(true);
   const [roasScalerActive, setRoasScalerActive] = useState(true);
 
-  // Dynamic Filtering by tab, platform pill filter, and search
+  // Dynamic Filtering by tab and search
   const filteredCampaigns = campaigns.filter((c) => {
     // Tab filter
     if (activeTab === 'active' && !c.active) return false;
     if (activeTab === 'paused' && c.active) return false;
-
-    // Platform pill filter
-    if (activePlatformFilter !== 'all' && c.platform !== activePlatformFilter) {
-      return false;
-    }
+    if (activeTab === 'Meta Ads' && c.platform !== 'Meta Ads') return false;
+    if (activeTab === 'TikTok Ads' && c.platform !== 'TikTok Ads') return false;
 
     // Search query filter
     if (searchQuery.trim() && !c.name.toLowerCase().includes(searchQuery.toLowerCase())) {
@@ -46,6 +43,8 @@ export default function Campaigns() {
   const totalCount = campaigns.length;
   const activeCount = campaigns.filter((c) => c.active).length;
   const pausedCount = campaigns.filter((c) => !c.active).length;
+  const metaCount = campaigns.filter((c) => c.platform === 'Meta Ads').length;
+  const tikTokCount = campaigns.filter((c) => c.platform === 'TikTok Ads').length;
 
   const formatBudget = (val) => {
     if (typeof val === 'number') return `$${val.toFixed(2)} / день`;
@@ -105,10 +104,7 @@ export default function Campaigns() {
 
   return (
     <div>
-      <Navbar
-        title="Центр управління кампаніями та медіабаїнгом"
-        breadcrumb="MkV CRM / Центр управління кампаніями та медіабаїнгом"
-      />
+      <Navbar title="Управління рекламними кампаніями" />
 
       <div className={styles.container}>
         {liveAlert && (
@@ -141,6 +137,20 @@ export default function Campaigns() {
               onClick={() => setActiveTab('paused')}
             >
               На паузі ({pausedCount})
+            </button>
+            <button
+              type="button"
+              className={`${styles.tabBtn} ${activeTab === 'Meta Ads' ? styles.tabBtnActive : ''}`}
+              onClick={() => setActiveTab('Meta Ads')}
+            >
+              Meta ({metaCount})
+            </button>
+            <button
+              type="button"
+              className={`${styles.tabBtn} ${activeTab === 'TikTok Ads' ? styles.tabBtnActive : ''}`}
+              onClick={() => setActiveTab('TikTok Ads')}
+            >
+              TikTok ({tikTokCount})
             </button>
           </div>
 

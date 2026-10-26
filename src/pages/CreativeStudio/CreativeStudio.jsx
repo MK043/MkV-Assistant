@@ -133,10 +133,7 @@ export default function CreativeStudio() {
 
   return (
     <div>
-      <Navbar
-        title="Креативна ШІ-студія (AI Creative Studio)"
-        breadcrumb="MkV CRM / Креативна ШІ-студія (AI Creative Studio)"
-      />
+      <Navbar title="Креативна ШІ-студія сценаріїв" />
 
       <div className={styles.container}>
         {/* Left Column: Form & Saved Scenarios */}

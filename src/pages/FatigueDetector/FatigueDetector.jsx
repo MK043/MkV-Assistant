@@ -68,10 +68,7 @@ export default function FatigueDetector() {
 
   return (
     <div>
-      <Navbar
-        title="Детектор вигорання аудиторії та хуки (Ad Fatigue)"
-        breadcrumb="MkV CRM / Детектор вигорання аудиторії та хуки (Ad Fatigue)"
-      />
+      <Navbar title="Детектор вигорання аудиторії та хуки" />
 
       <div className={styles.container}>
         {notification && (

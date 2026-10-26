@@ -36,10 +36,7 @@ export default function Analytics() {
 
   return (
     <div>
-      <Navbar
-        title="Головна панель аналітики (Analytics Dashboard)"
-        breadcrumb={`MkV CRM / Аналітика (${dateRange})`}
-      />
+      <Navbar title="Головна панель аналітики" />
 
       <div className={styles.container}>
         {/* Top 4 KPI Metrics */}

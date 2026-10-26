@@ -25,8 +25,7 @@ export default function MasterHub() {
   return (
     <div>
       <Navbar
-        title="Головний огляд платформи (Master Hub)"
-        breadcrumb="MkV CRM / Головний огляд платформи (Master Hub)"
+        title="Головний огляд платформи"
         actionLabel="+ Створити кампанію"
         onActionClick={() => setIsCreateModalOpen(true)}
       />
@@ -108,7 +107,7 @@ export default function MasterHub() {
                 className={styles.cardBtn}
                 onClick={() => navigate('/analytics')}
               >
-                <span>Перейти до аналітики (Розділ 2.1)</span>
+                <span>Перейти до аналітики</span>
                 <ArrowRight size={15} />
               </button>
             </div>
@@ -148,7 +147,7 @@ export default function MasterHub() {
                 className={styles.cardBtn}
                 onClick={() => navigate('/creative')}
               >
-                <span>Відкрити ШІ-студію (Розділ 2.2)</span>
+                <span>Відкрити ШІ-студію</span>
                 <ArrowRight size={15} />
               </button>
             </div>
@@ -188,7 +187,7 @@ export default function MasterHub() {
                 className={styles.cardBtn}
                 onClick={() => navigate('/campaigns')}
               >
-                <span>Керувати кампаніями (Розділ 2.3)</span>
+                <span>Керувати кампаніями</span>
                 <ArrowRight size={15} />
               </button>
             </div>
@@ -228,7 +227,7 @@ export default function MasterHub() {
                 className={styles.cardBtn}
                 onClick={() => navigate('/fatigue')}
               >
-                <span>Перевірити вигорання (Розділ 2.4)</span>
+                <span>Перевірити вигорання</span>
                 <ArrowRight size={15} />
               </button>
             </div>
